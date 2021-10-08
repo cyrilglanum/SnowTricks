@@ -18,13 +18,4 @@ class BlogController extends AbstractController
         ]);
     }
 
-//    /**
-//     * @Route("/register", name="register")
-//     */
-//    public function register(): Response
-//    {
-//        return $this->render('registration/register.html.twig', [
-//            'controller_name' => 'BlogController',
-//        ]);
-//    }
 }

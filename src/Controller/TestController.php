@@ -16,7 +16,10 @@ class TestController extends AbstractController
     public function test(Request $request,$age): Response
     {
         return $this->render('test/index.html.twig', [
-            'controller_name' => 'TestController', ['age' => $age]
+            'controller_name' => 'TestController',
+            'age' => $age
         ]);
     }
+
+
 }
