@@ -1,0 +1,10 @@
+#mainNavbar2{
+    margin-right: 5%;
+    margin-left: 5%;
+    background-color: whitesmoke;
+}
+
+#mainNavbar li{
+    text-decoration: none;
+    list-style-type: none;
+}
