@@ -1,19 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
+<head>
+    <link rel="icon" href="data:image/png;base64,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
+"/>
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"
+
+    {% block stylesheets %}
+
+        {# {{ encore_entry_link_tags('app') }} #}
+    {% endblock %}
+
+
+</head>
+<body>
+
+<nav class="navbar sticky-top navbar-light bg-light" id="mainNavbar">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyJ4gP1Ay3M-h_VYL_cXwH4629UIBueFj_xA&usqp=CAU"
+         style="width:150px;">
+    <div class="container-fluid justify-content-end" id="mainNavbar2">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Tricks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Sign in</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Sign up</a>
+        </li>
+    </div>
+</nav>
+
+{% block body %}
+
+
+{% endblock %}
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+{% block javascripts %}
+
+    {# {{ encore_entry_script_tags('app') }} #}
+{% endblock %}
 </html>
