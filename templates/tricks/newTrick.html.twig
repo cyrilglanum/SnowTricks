@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter Trick{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <h1>Register</h1>
+<div class="container">
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.img_background) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.groupe) }}
+        <button type="submit" class="btn">Ajouter mon trick</button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
