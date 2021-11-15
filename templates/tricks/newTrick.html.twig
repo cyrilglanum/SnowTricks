@@ -3,8 +3,8 @@
 {% block title %}Ajouter Trick{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% for flashError in app.flashes('message') %}
+        <div class="alert alert-danger" role="alert">{{ message }}</div>
     {% endfor %}
 
     <h1>Register</h1>
