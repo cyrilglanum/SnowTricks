@@ -3,43 +3,60 @@
 
 namespace App\Controller;
 
-
-
 use App\Entity\Tricks;
 use App\Form\TrickType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/form/new")
+     * @Route("/trick/new", name="newTrick")
      */
-    public function new(Request $request)
+    public function new(Request $request, SluggerInterface $slugger)
     {
         $trick = new Tricks();
-        $trick->setName('Hello World');
-        $trick->setImgBackground('enbfbsbfbe262511.jpg');
-        $trick->setDescription('Ce trick reprend les bases du snowboard ...');
-        $trick->setDateCreation(new \DateTime('now'));
-
-
         $form = $this->createForm(TrickType::class, $trick);
 
         $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($trick);
-        $em->flush();
 
-    }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick->setName($form->getName());
+            $brochureFile = $form->get('img_background')->getData();
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+                $trick->setImgBackground($newFilename);
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('trickFiles'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+            }
+
+            $trick->setDescription($form->get('description')->getData());
+            $trick->setDateCreation(new \DateTime('now'));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($trick);
+            $em->flush();
+        }
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
-            'message' => "le trick a bien été ajouté"
+            'message' => "le trick a bien été ajouté."
         ));
     }
 
@@ -47,7 +64,8 @@ class TrickController extends AbstractController
     /**
      * @Route("/tricks")
      */
-    public function tricks(Request $request)
+    public
+    function tricks(Request $request)
     {
         $trick = new Tricks();
         $trick->setName('Hello World');
@@ -58,9 +76,9 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        dump($trick);
-    }
+        if ($form->isSubmitted() && $form->isValid()) {
+            dump($trick);
+        }
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),

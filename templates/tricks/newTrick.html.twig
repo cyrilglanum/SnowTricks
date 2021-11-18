@@ -3,12 +3,15 @@
 {% block title %}Ajouter Trick{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('message') %}
-        <div class="alert alert-danger" role="alert">{{ message }}</div>
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    <h1>Register</h1>
+
+
 <div class="container">
+    <h1>Ajouter un trick</h1>
+      <p style="color: green"> {{ message }}</p>
     {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.img_background) }}

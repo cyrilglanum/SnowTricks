@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\TricksRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\AbstractType;
 
 /**
  * @ORM\Entity(repositoryClass=TricksRepository::class)
  */
-class Tricks
+class Tricks extends AbstractType
 {
     /**
      * @ORM\Id
