@@ -19,12 +19,11 @@
 
                     {% for trick in tricks %}
                         <div class="col-3">
-                            {{ trick.name }}
+                            <h2>{{ trick.name }}</h2>
                             {{ trick.description }}
                             <br>
-                            <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}">
-                            {# {{ trick.date_creation }} #}
-                            <em>{{ trick.dateCreation }}</em>
+                            <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
+                            <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em>
                             <hr>
                         </div>
                     {% endfor %}
