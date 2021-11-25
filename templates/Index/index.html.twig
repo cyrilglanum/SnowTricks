@@ -25,6 +25,10 @@
                             <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
                             <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
                             <a href="{{ url('trick', {'trick_id' : trick.id }) }}">Voir le trick</a>
+                {#get current user#}
+                            {% if (user.email == "cyrilg86rr@glanum.comz") %}
+                            {{ user.email }}
+                            {% endif %}
                             <hr>
                         </div>
                     {% endfor %}
