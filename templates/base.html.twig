@@ -25,17 +25,28 @@
          style="width:150px;">
     <div class="container-fluid justify-content-end" id="mainNavbar2">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ '/' }}">Home</a>
+            <a class="nav-link active" aria-current="page" href="{{ '/' }}">Accueil</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url('newTrick') }}">Tricks</a>
+            <a class="nav-link" href="{{ url('newTrick') }}"> Ajouter Trick</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url('app_login') }}">Sign in</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{ 'register' }}">Sign up</a>
-        </li>
+
+        {% if user.email is defined %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('profil', {'id' : user.id }) }}">Profil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('app_logout') }}">Déconnection</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('app_login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ 'register' }}">S'inscrire</a>
+                </li>
+        {% endif %}
+
     </div>
 </nav>
 

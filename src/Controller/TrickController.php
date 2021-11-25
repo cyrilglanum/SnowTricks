@@ -62,6 +62,19 @@ class TrickController extends AbstractController
 
 
     /**
+     * @Route("/editTrick/{trick_id}", name="editTrick", methods={"GET"})
+     */
+    public function editTrick(Request $request,$trick_id)
+    {
+        dd('trick_view', $trick_id);
+
+        return $this->render('tricks/newTrick.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+
+    /**
      * @Route("/trick/{trick_id}", name="trick", methods={"GET"})
      */
     public function trick(Request $request,$trick_id)
