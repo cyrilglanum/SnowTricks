@@ -11,7 +11,6 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        // create 20 products! Bam!
         for ($i = 0; $i < 3; $i++) {
             $product = new Tricks();
             $product->setName('trick '.$i);

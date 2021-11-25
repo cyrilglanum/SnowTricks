@@ -23,7 +23,8 @@
                             {{ trick.description }}
                             <br>
                             <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
-                            <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em>
+                            <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
+                            <a href="{{ url('trick', {'trick_id' : trick.id }) }}">Voir le trick</a>
                             <hr>
                         </div>
                     {% endfor %}
