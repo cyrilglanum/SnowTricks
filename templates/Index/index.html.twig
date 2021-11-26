@@ -18,9 +18,9 @@
 
 
                     {% for trick in tricks %}
-                        <div class="col-3">
+                        <div class="col-sm-12 col-md-6 col-xl-3">
                             <h2>{{ trick.name }}</h2>
-                            {{ trick.description }}
+                            <p>{{ trick.description }}</p>
                             <br>
                             <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
                             <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>

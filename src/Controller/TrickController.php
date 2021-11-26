@@ -25,7 +25,6 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setName($form->getName());
             $brochureFile = $form->get('img_background')->getData();
@@ -64,11 +63,42 @@ class TrickController extends AbstractController
     /**
      * @Route("/editTrick/{trick_id}", name="editTrick", methods={"GET"})
      */
-    public function editTrick(Request $request,$trick_id)
+    public function editTrick(Request $request,$trick_id, SluggerInterface $slugger)
     {
-        dd('trick_view', $trick_id);
+        $repo = $this->getDoctrine()->getManager()->getRepository('App:Tricks');
+        $trick = $repo->find($trick_id);
+        $form = $this->createForm(TrickType::class, $trick);
 
-        return $this->render('tricks/newTrick.html.twig', array(
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick->setName($form->getName());
+            $brochureFile = $form->get('img_background')->getData();
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+                $trick->setImgBackground($newFilename);
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('trickFiles'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+            }
+
+            $trick->setDescription($form->get('description')->getData());
+            $trick->setDateCreation(new \DateTime('now'));
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($trick);
+            $em->flush();
+        }
+        return $this->render('tricks/editTrick.html.twig', array(
             'form' => $form->createView(),
         ));
     }

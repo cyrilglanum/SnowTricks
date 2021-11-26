@@ -20,3 +20,18 @@
     text-decoration: none;
     list-style-type: none;
 }
+
+h2{
+    font-size: 4vw;
+}
+
+p{
+    font-size: 2vw;
+}
+
+@media screen and (max-width: 992px)
+{
+    p,h2{
+        font-size: 5vw;
+    }
+}
