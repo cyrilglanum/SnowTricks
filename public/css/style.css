@@ -6,12 +6,13 @@
 
 #mainNavbar li{
     text-decoration: none;
-
+    background-color: whitesmoke;
     list-style-type: none;
 }
 
 #mainNavbar2 .nav-item{
     color:black;
+    background-color: whitesmoke;
     text-decoration: none;
     list-style-type: none;
 }
@@ -22,7 +23,7 @@
 }
 
 h2{
-    font-size: 3vw;
+    font-size: 2vw;
 }
 
 p{

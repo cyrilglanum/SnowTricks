@@ -29,6 +29,7 @@
                             {% if user.email is defined %}
                                 {% if user.email == "cyrilg86rr@glanum.comz" %}
                                     <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"> Modifier le trick as</a>
+                                    <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"> Supprimer le trick</a>
                                     {{ user.email }}
                                 {% endif %}
                             {% endif %}

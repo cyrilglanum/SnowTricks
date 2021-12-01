@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Tricks;
 use App\Form\TrickType;
 use App\Form\TrickUpdateType;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -146,5 +147,24 @@ class TrickController extends AbstractController
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * @Route("/trick/delete/{id}", name="deleteTrick", methods={"GET"})
+     */
+    public function deleteTrick($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+       $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+
+        return $this->render('index/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'tricks' => $tricks,
+            'user' => $this->getUser(),
+        ]);
     }
 }
