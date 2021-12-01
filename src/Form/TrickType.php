@@ -27,6 +27,9 @@ class TrickType extends AbstractType
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
+                'mapped' => false,
+                'required' => false,
+
             ])
             ->add('description', TextType::class, [
                 "attr" => [

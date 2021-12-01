@@ -22,11 +22,13 @@
 }
 
 h2{
-    font-size: 4vw;
+    font-size: 3vw;
 }
 
 p{
-    font-size: 2vw;
+    font-size: 1.2vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @media screen and (max-width: 992px)
