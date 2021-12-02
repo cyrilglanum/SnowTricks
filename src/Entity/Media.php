@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\MediaTricksRepository;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=MediaTricksRepository::class)
+ * @ORM\Entity(repositoryClass=MediaRepository::class)
  */
-class MediaTricks
+class Media
 {
     /**
      * @ORM\Id
@@ -30,7 +30,7 @@ class MediaTricks
     /**
      * @ORM\Column(type="integer")
      */
-    private $tricks_id;
+    private $id_trick;
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -71,14 +71,14 @@ class MediaTricks
         return $this;
     }
 
-    public function getTricksId(): ?int
+    public function getIdTrick(): ?int
     {
-        return $this->tricks_id;
+        return $this->id_trick;
     }
 
-    public function setTricksId(int $tricks_id): self
+    public function setIdTrick(int $id_trick): self
     {
-        $this->tricks_id = $tricks_id;
+        $this->id_trick = $id_trick;
 
         return $this;
     }

@@ -3,6 +3,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
+use App\Entity\Media;
+use App\Entity\MediaTricks;
 use App\Entity\Tricks;
 use App\Form\TrickType;
 use App\Form\TrickUpdateType;
@@ -109,44 +112,20 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/Trick/edit/{trick_id}/", name="updateTrick", methods={"POST"})
+     * @Route("/trick/{id}", name="trick", methods={"GET"})
      */
-//    public function update(Request $request, $trick_id, SluggerInterface $slugger)
-//    {
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $trick = $entityManager->getRepository(Tricks::class)->find($trick_id);
-//        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
-//
-//        if (!$trick) {
-//            throw $this->createNotFoundException(
-//                'Pas de trick trouvé ' . $trick
-//            );
-//        }
-//
-//        $trick->setName($request->get('trick_update')['name']);
-//        $trick->setDescription($request->get('trick_update')['description']);
-//        $trick->setGroupe($request->get('trick_update')['groupe']);
-//
-//        $entityManager->flush();
-//
-//        return $this->render('index/index.html.twig', [
-//            'controller_name' => 'BlogController',
-//            'tricks' => $tricks,
-//            'user' => $this->getUser(),
-//        ]);
-//    }
-
-
-    /**
-     * @Route("/trick/{trick_id}", name="trick", methods={"GET"})
-     */
-    public function trick(Request $request, $trick_id)
+    public function trick(Request $request, $id)
     {
-        dd('trick_view', $trick_id);
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
+        $comments = $this->getDoctrine()->getManager()->getRepository(Comments::class)->findBy([
+            'id_trick' => $id
+        ]);
+        $medias = $this->getDoctrine()->getManager()->getRepository(Media::class)->findBy([
+            'id_trick' => $id
+        ]);
 
-        return $this->render('tricks/newTrick.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('tricks/trick.html.twig',['trick' => $trick, 'comments' => $comments, 'medias' => $medias]
+        );
     }
 
     /**
