@@ -19,9 +19,8 @@ class IndexController extends AbstractController
         $tricks = $this->getDoctrine()->getRepository(Tricks::class)->findAll();
 
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'BlogController',
-            'tricks' => $tricks,
-            'user' => $this->getUser(),
+            'tricks' => $tricks ?? null,
+            'user' => $this->getUser() ?? null,
         ]);
     }
 
