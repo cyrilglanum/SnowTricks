@@ -30,7 +30,11 @@ class MediaTricks
     /**
      * @ORM\Column(type="integer")
      */
+<<<<<<< Updated upstream:src/Entity/MediaTricks.php
     private $tricks_id;
+=======
+    private $trick_id;
+>>>>>>> Stashed changes:src/Entity/Media.php
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -71,6 +75,7 @@ class MediaTricks
         return $this;
     }
 
+<<<<<<< Updated upstream:src/Entity/MediaTricks.php
     public function getTricksId(): ?int
     {
         return $this->tricks_id;
@@ -79,6 +84,16 @@ class MediaTricks
     public function setTricksId(int $tricks_id): self
     {
         $this->tricks_id = $tricks_id;
+=======
+    public function getTrickId(): ?int
+    {
+        return $this->trick_id;
+    }
+
+    public function setTrickId(int $trick_id): self
+    {
+        $this->trick_id = $trick_id;
+>>>>>>> Stashed changes:src/Entity/Media.php
 
         return $this;
     }
@@ -106,4 +121,23 @@ class MediaTricks
 
         return $this;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="medias")
+     */
+    private $trick;
+
+    public function getTrick(): ?Tricks
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Tricks $trick): self
+    {
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+
 }

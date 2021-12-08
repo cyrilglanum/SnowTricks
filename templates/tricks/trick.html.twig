@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail Trick{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+
+
+    <div class="container">
+        <h1>Détail du trick {{ trick.name }}</h1>
+
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <br>
+                    <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
+                    <p>Description du trick:<br> {{ trick.description }}</p>
+                    <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
+                    {% if user.email is defined %}
+                        {% if user.email == "cyrilg86rr@glanum.comz" %}
+                            <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"> Modifier le trick as</a>
+                            <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"> Supprimer le trick</a>
+                            {{ user.email }}
+                        {% endif %}
+                    {% endif %}
+                    <hr>
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-6">
+                    <h3>Commentaires</h3>
+
+                    {% for comment in comments %}
+                        <em>{{ comment.author }}</em><br>
+                        {{ comment.message }}
+                        <br>
+                        <hr>
+                    {% endfor %}
+                    <a href="{{ url('commentTrick',{'id' : trick.id}) }}" class="btn btn-primary"> Commenter</a><br>
+                </div>
+            </div>
+        </div>
+        <h3>Médias reliés</h3>
+        {% for media in medias %}
+{{ media.url }}
+                        <br>
+                        <hr>
+                    {% endfor %}
+    </div>
+{% endblock %}

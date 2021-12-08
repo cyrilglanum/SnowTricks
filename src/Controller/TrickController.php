@@ -24,6 +24,7 @@ class TrickController extends AbstractController
     {
         $trick = new Tricks();
         $form = $this->createForm(TrickType::class, $trick);
+        $message = null;
 
         $form->handleRequest($request);
 
@@ -53,11 +54,13 @@ class TrickController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
+            $message = "le trick a bien été ajouté.";
         }
+
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
-            'message' => "le trick a bien été ajouté."
+            'message' => $message ?? null
         ));
     }
 
@@ -142,7 +145,14 @@ class TrickController extends AbstractController
      */
     public function trick(Request $request, $trick_id)
     {
+<<<<<<< Updated upstream
         dd('trick_view', $trick_id);
+=======
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
+//        dd($trick->getMedias()->getValues());
+        $comments = $trick->getComments()->getValues();
+        $medias = $trick->getMedias()->getValues();
+>>>>>>> Stashed changes
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
@@ -154,6 +164,26 @@ class TrickController extends AbstractController
      */
     public function deleteTrick($id)
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $trick = $entityManager->getRepository(Tricks::class)->find($id);
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+       $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+
+        return $this->render('index/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'tricks' => $tricks,
+            'user' => $this->getUser(),
+        ]);
+    }
+
+    /**
+     * @Route("/trick/comment/{id}", name="commentTrick", methods={"GET"})
+     */
+    public function commentTrick($id)
+    {
+        dd('comment');
         $entityManager = $this->getDoctrine()->getManager();
         $trick = $entityManager->getRepository(Tricks::class)->find($id);
         $entityManager->remove($trick);

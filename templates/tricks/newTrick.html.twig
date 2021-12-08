@@ -11,7 +11,7 @@
 
 <div class="container">
     <h1>Ajouter un trick</h1>
-      <p style="color: green"> {{ message }}</p>
+      <p style="color: green"> {{ message ?? null }}</p>
     {{ form_start(form) }}
         {{ form_row(form.name) }}
         {{ form_row(form.img_background) }}

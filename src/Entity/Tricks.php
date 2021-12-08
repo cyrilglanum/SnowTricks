@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TricksRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Form\AbstractType;
 
@@ -125,4 +127,37 @@ class Tricks extends AbstractType
 
         return $this;
     }
+
+    public function __construct()
+    {
+        $this->medias = new ArrayCollection();
+        $this->comments = new ArrayCollection();
+    }
+
+      /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick")
+     */
+    private $medias;
+
+    /**
+     * @return Collection|media[]
+     */
+    public function getMedias(): Collection
+    {
+        return $this->medias;
+    }
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comments", mappedBy="trick")
+     */
+    private $comments;
+
+    /**
+     * @return Collection|comments[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
 }

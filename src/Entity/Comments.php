@@ -35,7 +35,8 @@ class Comments
     /**
      * @ORM\Column(type="integer")
      */
-    private $id_trick;
+    private $trick_id;
+
 
     public function getId(): ?int
     {
@@ -89,4 +90,39 @@ class Comments
 
         return $this;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tricks", inversedBy="comments")
+     */
+    private $trick;
+
+    public function getTrick(): ?Tricks
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Tricks $trick): self
+    {
+        $this->trick = $trick;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="comments")
+     */
+    private $user;
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }

@@ -22,28 +22,28 @@
 
 <nav class="navbar sticky-top navbar-light bg-light" id="mainNavbar">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyJ4gP1Ay3M-h_VYL_cXwH4629UIBueFj_xA&usqp=CAU"
-         style="width:150px;">
-    <div class="container-fluid justify-content-end" id="mainNavbar2">
+         style="width:150px;border-radius: 10px">
+    <div class="container-fluid justify-content-end bg-light" id="mainNavbar2">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{ '/' }}">Accueil</a>
+            <a class="nav-link active bg-light" aria-current="page" href="{{ '/' }}">Accueil</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ url('newTrick') }}"> Ajouter Trick</a>
+            <a class="nav-link bg-light" href="{{ url('newTrick') }}"> Ajouter Trick</a>
         </li>
 
         {% if user.email is defined %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('profil', {'id' : user.id }) }}">Profil</a>
+                    <a class="nav-link bg-light" href="{{ url('profil', {'id' : user.id }) }}">Profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('app_logout') }}">Déconnection</a>
+                    <a class="nav-link bg-light" href="{{ url('app_logout') }}">Déconnection</a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('app_login') }}">Login</a>
+                    <a class="nav-link bg-light" href="{{ url('app_login') }}">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ 'register' }}">S'inscrire</a>
+                    <a class="nav-link bg-light" href="{{ 'register' }}">S'inscrire</a>
                 </li>
         {% endif %}
 
