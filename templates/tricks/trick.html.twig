@@ -23,7 +23,7 @@
                     {% if user.email is defined %}
                         {% if user.email == "cyrilg86rr@glanum.comz" %}
                             <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"> Modifier le trick as</a>
-                            <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"> Supprimer le trick</a>
+                            <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
                             {{ user.email }}
                         {% endif %}
                     {% endif %}
@@ -45,6 +45,7 @@
             </div>
         </div>
         <h3>Médias reliés</h3>
+        <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary"> Ajouter un média</a><br>
         {% for media in medias %}
 {{ media.url }}
                         <br>

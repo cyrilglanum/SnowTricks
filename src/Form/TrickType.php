@@ -22,6 +22,8 @@ class TrickType extends AbstractType
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
+                'label' => 'Nom de la figure',
+
             ])
             ->add('img_background', FileType::class, [
                 "attr" => [
@@ -29,6 +31,7 @@ class TrickType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Image de présentation',
 
             ])
             ->add('description', TextType::class, [
@@ -41,7 +44,6 @@ class TrickType extends AbstractType
                     'class' => 'col-12'
                 ],
             ]);
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

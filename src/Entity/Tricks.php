@@ -35,6 +35,11 @@ class Tricks extends AbstractType
      */
     private $description;
 
+//    /**
+//     * @ORM\Column(type="string", length=255)
+//     */
+//    private $media_urls;
+
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
@@ -128,6 +133,18 @@ class Tricks extends AbstractType
         return $this;
     }
 
+//    public function getMediaUrls(): ?string
+//    {
+//        return $this->media_urls;
+//    }
+//
+//    public function setMediaUrls(?string $media_urls): self
+//    {
+//        $this->media_urls = $media_urls;
+//
+//        return $this;
+//    }
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -145,6 +162,13 @@ class Tricks extends AbstractType
     public function getMedias(): Collection
     {
         return $this->medias;
+    }
+
+    public function setMedias(?string $medias): self
+    {
+        $this->medias = $medias;
+
+        return $this;
     }
 
     /**
