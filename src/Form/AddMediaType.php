@@ -21,11 +21,10 @@ class AddMediaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('url_img', FileType::class, [
+            ->add('url', FileType::class, [
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
-                'mapped' => false,
                 'label' => 'Image',
                 'required' => false,
             ])
@@ -49,9 +48,7 @@ class AddMediaType extends AbstractType
                     'class' => 'col-12 mb-3'
                 ],
                 'label' => 'Url du média (si vidéo)',
-                'mapped' => false,
                 'required' => false,
-
             ])
             ->add('description', TextType::class, [
                 "attr" => [

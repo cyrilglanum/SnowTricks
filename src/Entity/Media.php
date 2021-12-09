@@ -28,6 +28,11 @@ class Media
     private $type;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    public $url_video;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $trick_id;
@@ -59,6 +64,18 @@ class Media
         return $this;
     }
 
+    public function getUrlVideo(): ?string
+    {
+        return $this->url_video;
+    }
+
+    public function setUrlVideo(string $url_video): self
+    {
+        $this->url_video = $url_video;
+
+        return $this;
+    }
+
     public function getType(): ?string
     {
         return $this->type;
@@ -69,11 +86,6 @@ class Media
         $this->type = $type;
 
         return $this;
-    }
-
-    public function getTricksId(): ?int
-    {
-        return $this->tricks_id;
     }
 
     public function getTrickId(): ?int
