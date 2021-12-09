@@ -16,12 +16,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MediaController extends AbstractController
 {
     /**
-     * @Route("/media/add", name="addMedia")
+     * @Route("/media/add/{id}", name="addMedia")
      */
-    public function new(Request $request, SluggerInterface $slugger)
+    public function new(Request $request, SluggerInterface $slugger,Tricks $trick)
     {
         $media = new Media();
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($request->get('id'));
         if($trick === null){
              return $this->redirect('/');
         }

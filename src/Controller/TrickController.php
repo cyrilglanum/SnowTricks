@@ -79,7 +79,7 @@ class TrickController extends AbstractController
 
         //soumission du form
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName($form->getName());
+            $trick->setName($form->getData()->getName());
             $brochureFile = $form->get('img_background')->getData();
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -100,7 +100,7 @@ class TrickController extends AbstractController
             }
 
             $trick->setDescription($form->get('description')->getData());
-            $trick->setDateCreation(new \DateTime('now'));
+            $trick->setDateModification(new \DateTime('now'));
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
