@@ -177,4 +177,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->comments;
     }
+
+      /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tricks", mappedBy="user")
+     */
+    private $tricks;
+
+    /**
+     * @return Collection|Tricks[]
+     */
+    public function getTricks(): Collection
+    {
+        return $this->tricks;
+    }
+
 }

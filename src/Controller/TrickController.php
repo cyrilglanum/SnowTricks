@@ -114,12 +114,11 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/Trick/edit/{trick_id}/", name="updateTrick", methods={"POST"})
+     * @Route("/Trick/{id}", name="trick", methods={"GET"})
      */
     public function trick(Request $request, $id)
     {
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
-//        dd($trick->getMedias()->getValues());
         $comments = $trick->getComments()->getValues();
         $medias = $trick->getMedias()->getValues();
 

@@ -160,4 +160,22 @@ class Tricks extends AbstractType
         return $this->comments;
     }
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="tricks")
+     */
+    private $user;
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
 }
