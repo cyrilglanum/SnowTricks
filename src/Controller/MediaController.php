@@ -18,11 +18,11 @@ class MediaController extends AbstractController
     /**
      * @Route("/media/add/{id}", name="addMedia")
      */
-    public function new(Request $request, SluggerInterface $slugger,Tricks $trick)
+    public function new(Request $request, SluggerInterface $slugger, Tricks $trick)
     {
         $media = new Media();
-        if($trick === null){
-             return $this->redirect('/');
+        if ($trick === null) {
+            return $this->redirect('/');
         }
         $form = $this->createForm(AddMediaType::class, $media);
 
@@ -37,13 +37,22 @@ class MediaController extends AbstractController
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+
                 $media->setUrl($newFilename);
                 // Move the file to the directory where brochures are stored
                 try {
-                    $file->move(
-                        $this->getParameter('trickFiles'),
-                        $newFilename
-                    );
+                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                        $file->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
+                    } else {
+                        $file->move(
+                            $this->getParameter('trickFiles'),
+                            $newFilename
+                        );
+                    }
+
                 } catch (FileException $e) {
                     return $e;
                 }
@@ -58,7 +67,7 @@ class MediaController extends AbstractController
             $em->persist($media);
             $em->flush();
 
-            return $this->redirectToRoute('trick',['id' => $trick->getId()]);
+            return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
         }
 
         return $this->render('medias/newMedia.html.twig', array(

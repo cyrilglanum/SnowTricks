@@ -21,7 +21,7 @@
                     <p>Description du trick:<br> {{ trick.description }}</p>
                     <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
                     {% if user.email is defined %}
-                        {% if user.email == "cyrilg86rr@glanum.comz" %}
+                        {% if user.email == "cyril@glanum.com" %}
                             <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"> Modifier le trick as</a>
                             <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
                             {{ user.email }}
@@ -45,7 +45,7 @@
                     <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary mb-3"> Ajouter un média</a><br>
                     {% for media in medias %}
                         {% if media.type == 'IMG' %}
-                            <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}"><br>
+                            <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="max-width: 100%"><br>
                             {{ media.description }}
                         {% else %}
                             <embed type="video/webm"

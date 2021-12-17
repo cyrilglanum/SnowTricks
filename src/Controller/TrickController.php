@@ -8,7 +8,6 @@ use App\Entity\Media;
 use App\Entity\Tricks;
 use App\Form\CommentType;
 use App\Form\TrickType;
-use App\Form\TrickUpdateType;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -43,10 +42,17 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    $brochureFile->move(
-                        $this->getParameter('trickFiles'),
-                        $newFilename
-                    );
+                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                        $brochureFile->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
+                    } else {
+                        $brochureFile->move(
+                            $this->getParameter('trickFiles'),
+                            $newFilename
+                        );
+                    }
                 } catch (FileException $e) {
                     return $e;
                 }
@@ -91,16 +97,21 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    $brochureFile->move(
-                        $this->getParameter('trickFiles'),
-                        $newFilename
-                    );
-                    dd($this);
+                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                        $brochureFile->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
+                    } else {
+                        $brochureFile->move(
+                            $this->getParameter('trickFiles'),
+                            $newFilename
+                        );
+                    }
                 } catch (FileException $e) {
                     return $e;
                 }
             }
-
             $trick->setDescription($form->get('description')->getData());
             $trick->setDateModification(new \DateTime('now'));
             $em = $this->getDoctrine()->getManager();
