@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Comments;
 use App\Entity\Media;
 use App\Entity\Tricks;
+use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Form\TrickUpdateType;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -94,6 +95,7 @@ class TrickController extends AbstractController
                         $this->getParameter('trickFiles'),
                         $newFilename
                     );
+                    dd($this);
                 } catch (FileException $e) {
                     return $e;
                 }
@@ -104,6 +106,8 @@ class TrickController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
+
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('tricks/editTrick.html.twig', array(
@@ -122,7 +126,7 @@ class TrickController extends AbstractController
         $comments = $trick->getComments()->getValues();
         $medias = $trick->getMedias()->getValues();
 
-         return $this->render('tricks/trick.html.twig',['trick' => $trick, 'comments' => $comments, 'medias' => $medias]
+        return $this->render('tricks/trick.html.twig', ['trick' => $trick, 'comments' => $comments, 'medias' => $medias]
         );
     }
 
@@ -136,7 +140,7 @@ class TrickController extends AbstractController
         $entityManager->remove($trick);
         $entityManager->flush();
 
-       $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+        $tricks = $entityManager->getRepository(Tricks::class)->findAll();
 
         return $this->render('index/index.html.twig', [
             'controller_name' => 'BlogController',
@@ -146,22 +150,35 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/comment/{id}", name="commentTrick", methods={"GET"})
+     * @Route("/trick/comment/{id}", name="commentTrick", methods={"GET", "POST"})
      */
-    public function commentTrick($id)
+    public function commentTrick(Request $request, $id)
     {
-        dd('comment');
-        $entityManager = $this->getDoctrine()->getManager();
-        $trick = $entityManager->getRepository(Tricks::class)->find($id);
-        $entityManager->remove($trick);
-        $entityManager->flush();
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
+        $user_id = $this->getUser()->getId();
+        $comment = new Comments();
 
-       $tricks = $entityManager->getRepository(Tricks::class)->findAll();
+        $form = $this->createForm(CommentType::class, ['trick' => $trick, 'user_id' => $user_id]);
 
-        return $this->render('index/index.html.twig', [
-            'controller_name' => 'BlogController',
-            'tricks' => $tricks,
+        $form->handleRequest($request);
+//soumission du form
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setMessage($form->get('message')->getData());
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
+            $comment->setAuthor($this->getUser()->getEmail());
+            $comment->setCreatedAt(new \DateTimeImmutable('now'));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
+        }
+
+        return $this->render('comments/commentForm.html.twig', [
             'user' => $this->getUser(),
+            'form' => $form->createView(),
         ]);
     }
 }

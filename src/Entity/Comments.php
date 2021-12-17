@@ -79,14 +79,14 @@ class Comments
         return $this;
     }
 
-    public function getIdTrick(): ?int
+    public function getTrickId(): ?int
     {
-        return $this->id_trick;
+        return $this->trick_id;
     }
 
-    public function setIdTrick(int $id_trick): self
+    public function setIdTrick(int $trick_id): self
     {
-        $this->id_trick = $id_trick;
+        $this->trick_id = $trick_id;
 
         return $this;
     }

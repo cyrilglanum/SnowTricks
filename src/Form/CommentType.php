@@ -3,50 +3,45 @@
 
 namespace App\Form;
 
-use App\Entity\Tricks;
+use App\Entity\Comments;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TrickType extends AbstractType
+class CommentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder
-            ->add('name', TextType::class, [
+            ->add('message', TextType::class, [
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
-                'label' => 'Nom de la figure',
+                'label' => 'Votre commentaire',
+            ])
+            ->add('trick_id', HiddenType::class, [
+                "attr" => [
+                    'class' => 'col-12 mb-3'
+                ],
+                'data' => $options['data']['trick']->getId()
 
             ])
-            ->add('img_background', FileType::class, [
+            ->add('user_id', HiddenType::class, [
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
-                'mapped' => false,
-                'required' => false,
-                'label' => 'Image de présentation',
-
-            ])
-            ->add('description', TextType::class, [
-                "attr" => [
-                    'class' => 'col-12 mb-3'
-                ],
-            ])
-            ->add('groupe', TextType::class, [
-                "attr" => [
-                    'class' => 'col-12'
-                ],
+                'data' => $options['data']['user_id']
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Tricks::class,
+            'data_class' => null
         ]);
     }
 }

@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{# {% block title %}Hello BlogController!{% endblock %} #}
-
 {% block body %}
 
     <div class="example-wrapper">
@@ -27,7 +25,7 @@
                             <a href="{{ url('trick', {'id' : trick.id }) }}"><i class="fas fa-eye"></i></a>
                             {# get current user #}
                             {% if user.email is defined %}
-                                {% if user.email == "cyrilg86rr@glanum.comz" %}
+                                {% if user.email == "cyril@glanum.com" %}
                                     <a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"><i class="fas fa-edit"></i></a>
                                     <a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
                                 {% endif %}
