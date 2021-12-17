@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail Trick{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+
+
+    <div class="container">
+        <h1>Détail du trick {{ trick.name }}</h1>
+
+        <div class="loadComments">Content1</div>
+        <div class="loadComments">Content2</div>
+        <div class="loadComments">Content3</div>
+        <div class="loadComments">Content4</div>
+        <div class="loadComments d-none">Content5</div>
+        <div class="loadComments d-none">Content6</div>
+        <div class="loadComments d-none">Content7</div>
+        <div class="loadComments d-none">Content8</div>
+        <div class="loadComments d-none">Content9</div>
+        <div class="loadComments d-none">Content10</div>
+        <div class="loadComments d-none">Content11</div>
+        <div class="loadComments d-none">Content12</div>
+        <div class="loadComments d-none">Content13</div>
+        <div class="loadComments d-none">Content14</div>
+
+        <a href="#" id="loadMore">Load More</a>
+
+    </div>
+
+    <script>
+        const $ = require('jquery');
+
+        var load = document.getElementById('loadMore');
+        var divToLoad = document.getElementsByClassName('loadComments');
+        const startCount = 0;
+        const endCount = 4;
+        const counter = 4;
+
+        const elements = Array.prototype.slice.call(divToLoad, startCount, endCount);
+
+        load.addEventListener("click", loadElements);
+
+        function loadElements() {
+            console.log('he')
+            elements.className = "block";
+        }
+
+        console.log(divToLoad, elements)
+
+
+        // $(function () {
+        //     $("div").slice(0, 4).show();
+        //     $("#loadMore").on('click', function (e) {
+        //         e.preventDefault();
+        //         $("div:hidden").slice(0, 4).slideDown();
+        //         if ($("div:hidden").length == 0) {
+        //             $("#load").fadeOut('slow');
+        //         }
+        //         $('html,body').animate({
+        //             scrollTop: $(this).offset().top
+        //         }, 1500);
+        //     });
+        // });
+        //
+        // $(window).scroll(function () {
+        //     if ($(this).scrollTop() > 50) {
+        //         $('.totop a').fadeIn();
+        //     } else {
+        //         $('.totop a').fadeOut();
+        //     }
+        // });
+    </script>
+    <style>
+        /*        body {*/
+        /*    background-color: #f6f6f6;*/
+        /*    width: 400px;*/
+        /*    margin: 20px auto;*/
+        /*    font: normal 13px/100% sans-serif;*/
+        /*    color: #444;*/
+        /*}*/
+        /*div {*/
+        /*    display:none;*/
+        /*    padding: 10px;*/
+        /*    border-width: 0 1px 1px 0;*/
+        /*    border-style: solid;*/
+        /*    border-color: #fff;*/
+        /*    box-shadow: 0 1px 1px #ccc;*/
+        /*    margin-bottom: 5px;*/
+        /*    background-color: #f1f1f1;*/
+        /*}*/
+        /*.totop {*/
+        /*    position: fixed;*/
+        /*    bottom: 10px;*/
+        /*    right: 20px;*/
+        /*}*/
+        /*.totop a {*/
+        /*    display: none;*/
+        /*}*/
+        /*a, a:visited {*/
+        /*    color: #33739E;*/
+        /*    text-decoration: none;*/
+        /*    display: block;*/
+        /*    margin: 10px 0;*/
+        /*}*/
+        /*a:hover {*/
+        /*    text-decoration: none;*/
+        /*}*/
+        /*#loadMore {*/
+        /*    padding: 10px;*/
+        /*    text-align: center;*/
+        /*    background-color: #33739E;*/
+        /*    color: #fff;*/
+        /*    border-width: 0 1px 1px 0;*/
+        /*    border-style: solid;*/
+        /*    border-color: #fff;*/
+        /*    box-shadow: 0 1px 1px #ccc;*/
+        /*    transition: all 600ms ease-in-out;*/
+        /*    -webkit-transition: all 600ms ease-in-out;*/
+        /*    -moz-transition: all 600ms ease-in-out;*/
+        /*    -o-transition: all 600ms ease-in-out;*/
+        /*}*/
+        /*#loadMore:hover {*/
+        /*    background-color: #fff;*/
+        /*    color: #33739E;*/
+        /*}*/
+    </style>
+{% endblock %}

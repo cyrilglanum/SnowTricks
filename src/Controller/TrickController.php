@@ -136,8 +136,9 @@ class TrickController extends AbstractController
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
         $comments = $trick->getComments()->getValues();
         $medias = $trick->getMedias()->getValues();
+        $user = $this->getUser();
 
-        return $this->render('tricks/trick.html.twig', ['trick' => $trick, 'comments' => $comments, 'medias' => $medias]
+        return $this->render('tricks/trick.html.twig', ['trick' => $trick, 'comments' => $comments, 'medias' => $medias, 'user' => $user]
         );
     }
 

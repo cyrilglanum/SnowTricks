@@ -35,4 +35,24 @@ class IndexController extends AbstractController
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * @Route("/testing/{id}", name="testing", methods={"GET"})
+     */
+    public function test(Request $request, $id)
+    {
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
+        $comments = $trick->getComments()->getValues();
+        $medias = $trick->getMedias()->getValues();
+        $user = $this->getUser();
+
+        return $this->render('index/test.html.twig',
+            [
+            'trick' => $trick,
+            'comments' => $comments,
+            'medias' => $medias,
+            'user' => $user
+            ]
+        );
+    }
 }
