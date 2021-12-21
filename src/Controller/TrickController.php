@@ -4,15 +4,11 @@
 namespace App\Controller;
 
 use App\Entity\Comments;
-use App\Entity\Media;
 use App\Entity\Tricks;
 use App\Form\CommentType;
 use App\Form\TrickType;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -26,10 +22,8 @@ class TrickController extends AbstractController
     {
         $trick = new Tricks();
         $form = $this->createForm(TrickType::class, $trick);
-        $message = null;
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setName($form->getName());
             $brochureFile = $form->get('img_background')->getData();
@@ -63,19 +57,18 @@ class TrickController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
-            $message = "le trick a bien été ajouté.";
-        }
 
+            return $this->redirectToRoute('app_home', ['message' => 'La figure a bien été ajoutée.']);
+        }
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
-            'message' => $message ?? null
+            'trick' => $trick,
         ));
     }
 
-
     /**
-     * @Route("/Trick/editForm/{trick_id}", name="editTrick")
+     * @Route("/trick/editForm/{trick_id}", name="editTrick")
      */
     public function updateForm(Request $request, $trick_id, SluggerInterface $slugger)
     {
@@ -118,18 +111,21 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
+            $this->addFlash('success', 'Le média a bien été modifié.');
+
             return $this->redirectToRoute('app_home');
         }
+
+
 
         return $this->render('tricks/editTrick.html.twig', array(
             'form' => $form->createView(),
             'trick' => $trick,
-            'message' => '',
         ));
     }
 
     /**
-     * @Route("/Trick/{id}", name="trick", methods={"GET"})
+     * @Route("/trick/{id}", name="trick", methods={"GET"})
      */
     public function trick(Request $request, $id)
     {
@@ -154,8 +150,9 @@ class TrickController extends AbstractController
 
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
 
-        return $this->render('index/index.html.twig', [
-            'controller_name' => 'BlogController',
+        $this->addFlash('success', 'La figure a bien été supprimé.');
+
+        return $this->redirectToRoute('app_home', [
             'tricks' => $tricks,
             'user' => $this->getUser(),
         ]);

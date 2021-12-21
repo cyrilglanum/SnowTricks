@@ -57,7 +57,12 @@ class MediaController extends AbstractController
                     return $e;
                 }
             } elseif ($form->getData()->getType() === "VID") {
-                $media->setUrl($form->getData()->getUrlVideo());
+                if(str_contains($form->getData()->getUrlVideo(),"https://youtu.be")){
+                    $media->setUrl("https://www.youtube.com/embed/".explode("/",$form->getData()->getUrlVideo())[3]);
+                }else{
+                    $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
+                    return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
+                }
             } else {
                 return false;
             }
@@ -66,6 +71,8 @@ class MediaController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($media);
             $em->flush();
+
+            $this->addFlash('success', 'Le média a bien été ajouté.');
 
             return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
         }

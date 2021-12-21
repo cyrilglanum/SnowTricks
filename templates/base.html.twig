@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="{{ asset('../css/style.css') }}">
     <script src="https://kit.fontawesome.com/7849b55345.js" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 
 
 
@@ -61,7 +69,7 @@
 
     <div class="container-fluid bg-dark" id="mainNavbar2">
         <a href="{{ url('app_home') }}"> <img src="{{ asset('/uploads/tricksFile/snowboard-jumping-in-mountains.jpg') }}"
-                                                   style="border-radius: 10px; margin-left: 0 ; justify-content: start!important;" id="background-img" height="100px" ></a>
+                                                   style="border-radius: 10px; margin-left: 0 ; justify-content: start!important;" id="background-img" height="80px" ></a>
         <li class="nav-item">
             <a class="nav-link active bg-dark" aria-current="page" href="{{ '/' }}">Accueil</a>
         </li>
@@ -84,13 +92,18 @@
                     <a class="nav-link bg-dark" href="{{ 'register' }}">S'inscrire</a>
                 </li>
         {% endif %}
+        <li class="nav-item">
+                    <a class="nav-link bg-dark" href="#tricks"><i class="fas fa-arrow-down"></i></a>
+                </li>
+
 
     </div>
 
 
 </nav>
-
-
+{% if message is defined %}
+    <div class="alert alert-success mt-3" role="alert">{{ message }}.</div>
+{% endif %}
 {% block body %}
 
 
@@ -144,7 +157,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% block javascripts %}
-
     {# {{ encore_entry_script_tags('app') }} #}
 {% endblock %}
 </html>

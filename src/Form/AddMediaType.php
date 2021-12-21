@@ -47,7 +47,7 @@ class AddMediaType extends AbstractType
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
-                'label' => 'Url du média (si vidéo)',
+                'label' => 'Url du média (si vidéo - youtube : partager le lien)',
                 'required' => false,
             ])
             ->add('description', TextType::class, [
