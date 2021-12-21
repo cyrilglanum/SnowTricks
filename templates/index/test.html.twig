@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail Trick{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+
+
+    <div class="container">
+        <h1>Détail du trick {{ trick.name }}</h1>
+
+        <div class="loadComments">Content1</div>
+        <div class="loadComments">Content2</div>
+        <div class="loadComments">Content3</div>
+        <div class="loadComments">Content4</div>
+        <div class="loadComments d-none">Content5</div>
+        <div class="loadComments d-none">Content6</div>
+        <div class="loadComments d-none">Content7</div>
+        <div class="loadComments d-none">Content8</div>
+        <div class="loadComments d-none">Content9</div>
+        <div class="loadComments d-none">Content10</div>
+        <div class="loadComments d-none">Content11</div>
+        <div class="loadComments d-none">Content12</div>
+        <div class="loadComments d-none">Content13</div>
+        <div class="loadComments d-none">Content14</div>
+
+        <a href="#" id="loadMore">Load More</a>
+
+    </div>
+
+    <script>
+        var startCount = 4;
+        var endCount = 8;
+        const counter = 4;
+        var elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
+
+        $('#loadMore').click(function () {
+            console.log('hes');
+            console.log(elements);
+            $(elements).addClass('block');
+            $(elements).removeClass('d-none');
+            startCount = endCount;
+            endCount = endCount + counter;
+            elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
+        })
+
+    </script>
+
+{% endblock %}

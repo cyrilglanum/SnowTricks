@@ -8,7 +8,6 @@
     {% endfor %}
 
 
-
     <div class="container">
         <h1>Détail du trick {{ trick.name }}</h1>
 
@@ -22,31 +21,57 @@
                     <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
                     {% if user.email is defined %}
                         {% if user.email == "cyril@glanum.com" %}
-                            <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"> Modifier le trick as</a>
-                            <br><a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
-                            {{ user.email }}
+                            <br><a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
                         {% endif %}
                     {% endif %}
                     <hr>
                     <h3>Commentaires</h3>
+                    {% if user.email is defined %}
+                        <a href="{{ url('commentTrick',{'id' : trick.id}) }}" class="btn btn-primary">
+                            <button class="btn btn-primary">Commenter</button>
+                        </a><br>
+                    {% endif %}
+                    {% set count = 0 %}
+                    {% for comment in comments|reverse %}
+                        <div {% if(count < 4) %}
+                            class="loadComments"
+                        {% else %}
+                            class="loadComments d-none"
+                        {% endif %}
+                        >
+                            <em>{{ comment.author }}</em><br>
+                            {{ comment.message }}
+                            <br>
+                            <em>Ecrit le {{ comment.getCreatedAt()|date('d/m/Y H:i:s') }}</em>
+                            <br>
+                            <hr>
+                        </div>
+                        {% set count = count + 1 %}
 
-                    {% for comment in comments %}
-                        <em>{{ comment.author }}</em><br>
-                        {{ comment.message }}
-                        <br>
-                        <hr>
                     {% endfor %}
-                    <a href="{{ url('commentTrick',{'id' : trick.id}) }}" class="btn btn-primary"> Commenter</a><br>
+
+                    {% if count != 0 %}
+                        <a id="loadMore">Load More</a>
+                    {% endif %}
+
                 </div>
                 <div class="col-md-2">
                 </div>
                 <div class="col-md-6">
                     <h3>Médias</h3>
-                    <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary mb-3"> Ajouter un média</a><br>
+                    {% if user.email is defined %}
+                        <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary mb-3"> Ajouter un
+                            média</a><br>
+                    {% endif %}
                     {% for media in medias %}
                         {% if media.type == 'IMG' %}
                             <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="max-width: 100%"><br>
                             {{ media.description }}
+                            {% if user.email == "cyril@glanum.com" %}
+                                <a href="{{ url('deleteMedia', {'trick_id':trick.id,'media_id': media.id}) }}" onclick=" var result = confirm('Etes vous sur de vouloir supprimer le média?');return result">
+                                    <i class="fas fa-trash"></i></a>
+                            {% endif %}
                         {% else %}
                             <embed type="video/webm"
                                    src="{{ media.url }}"
@@ -60,6 +85,25 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <script>
+        var startCount = 4;
+        var endCount = 8;
+        const counter = 4;
+        var elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
+
+        $('#loadMore').click(function () {
+            console.log('hes');
+            console.log(elements);
+            $(elements).addClass('block');
+            $(elements).removeClass('d-none');
+            startCount = endCount;
+            endCount = endCount + counter;
+            elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
+            // if(startCount>elements.length){
+            //     alert('tous les messages sont affichés')
+            // }
+        })
+
+    </script>
 {% endblock %}

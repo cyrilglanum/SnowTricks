@@ -76,4 +76,23 @@ class MediaController extends AbstractController
         ));
     }
 
+    /**
+     * @Route("/media/delete/{trick_id}/{media_id}", name="deleteMedia")
+     */
+    public function deleteMedia($trick_id,$media_id)
+    {
+        if ($media_id === null) {
+            return $this->redirect('/');
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $media = $entityManager->getRepository(Media::class)->find($media_id);
+        $entityManager->remove($media);
+        $entityManager->flush();
+
+        $trick = $entityManager->getRepository(Tricks::class)->find($trick_id);
+
+        return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
+    }
+
 }
