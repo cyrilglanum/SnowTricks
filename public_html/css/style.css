@@ -27,6 +27,10 @@
     display: none
 }
 
+.fa, .fas {
+    color:peru;
+}
+
 h2 {
     font-size: 2vw;
 }
