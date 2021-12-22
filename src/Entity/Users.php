@@ -45,6 +45,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $username;
 
     /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $image;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
@@ -66,6 +72,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -81,7 +99,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->user;
     }
 
     /**
