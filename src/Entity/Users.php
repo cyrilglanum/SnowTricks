@@ -99,7 +99,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->user;
+        return (string) $this->username;
     }
 
     /**

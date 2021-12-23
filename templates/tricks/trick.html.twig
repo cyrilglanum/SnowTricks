@@ -61,7 +61,7 @@
                                    src="{{ media.url }}"
                                    width="380"
                                    height="280">
-                            <a href="{{ media.url }}">Voir la vidéo originale ici</a>
+                            <a href="{{ media.url }}"></a>
                             {% endif %}
                     </div>
                     {% endfor %}
@@ -90,7 +90,7 @@
                     {{ comment.message }}<br>
                     <em>{{ comment.author }}</em>
                     <br>
-                    <em>Ecrit le {{ comment.getCreatedAt()|date('d/m/Y H:i:s') }}</em>
+                    <em>Ecrit le {{ comment.getCreatedAt()|date('d/m/Y H:i:s') }} par {{ comment.author }}</em>
                     <br>
                     <hr>
                 </div>
@@ -99,7 +99,7 @@
             {% endfor %}
 
             {% if count != 0 %}
-                <a id="loadMore" style="padding-bottom: 100px">Load More</a>
+                <a id="loadMore" style="padding-bottom: 100px"><i class="fas fa-plus"></i> Charger plus (total :{{ comments|length }} commentaires)</a>
             {% endif %}
 
         </div>
@@ -131,7 +131,6 @@
         var elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
 
         $('#loadMore').click(function () {
-            console.log('hes');
             console.log(elements);
             $(elements).addClass('block');
             $(elements).removeClass('d-none');

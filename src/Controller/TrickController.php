@@ -22,48 +22,49 @@ class TrickController extends AbstractController
     {
         $trick = new Tricks();
         $form = $this->createForm(TrickType::class, $trick);
+        $user = $this->getUser();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName($form->getName());
-            $brochureFile = $form->get('img_background')->getData();
-            if ($brochureFile) {
-                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
-                $trick->setImgBackground($newFilename);
+                $trick->setName($form->getData()->getName());
+                $brochureFile = $form->get('img_background')->getData();
+                if ($brochureFile) {
+                    $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    // this is needed to safely include the file name as part of the URL
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+                    $trick->setImgBackground($newFilename);
 
-                // Move the file to the directory where brochures are stored
-                try {
-                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
-                        $brochureFile->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
-                    } else {
-                        $brochureFile->move(
-                            $this->getParameter('trickFiles'),
-                            $newFilename
-                        );
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                            $brochureFile->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        } else {
+                            $brochureFile->move(
+                                $this->getParameter('trickFiles'),
+                                $newFilename
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
                     }
-                } catch (FileException $e) {
-                    return $e;
                 }
-            }
-
-            $trick->setDescription($form->get('description')->getData());
-            $trick->setDateCreation(new \DateTime('now'));
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trick);
-            $em->flush();
-
-            return $this->redirectToRoute('app_home', ['message' => 'La figure a bien été ajoutée.']);
+                $trick->setDescription($form->get('description')->getData());
+                $trick->setDateCreation(new \DateTime('now'));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($trick);
+                $em->flush();
+                $this->addFlash('success', 'Le trick a bien été ajouté.');
+                return $this->redirectToRoute('app_home');
         }
 
         return $this->render('tricks/newTrick.html.twig', array(
             'form' => $form->createView(),
             'trick' => $trick,
+            'user' => $user,
         ));
     }
 
@@ -111,7 +112,7 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-            $this->addFlash('success', 'Le média a bien été modifié.');
+            $this->addFlash('success', 'Le trick a bien été modifié.');
 
             return $this->redirectToRoute('app_home');
         }
@@ -150,7 +151,7 @@ class TrickController extends AbstractController
 
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
 
-        $this->addFlash('success', 'La figure a bien été supprimé.');
+        $this->addFlash('success', 'La figure a bien été supprimée.');
 
         return $this->redirectToRoute('app_home', [
             'tricks' => $tricks,

@@ -28,12 +28,25 @@
 }
 
 .fa, .fas {
-    color:steelblue;
+    color:midnightblue;
+}
+
+.fa-arrow-down {
+    color:whitesmoke;
 }
 
 h2 {
     font-size: 2vw;
+    font-weight: 500!important;
+    color: midnightblue!important;
 }
+
+h3 {
+    font-size: 1.8vw;
+    font-weight: 400!important;
+    color: midnightblue!important;
+}
+
 
 p {
     font-size: 1vw;
@@ -50,8 +63,16 @@ p {
         display: block
     }
 
-    .navbar-brand {
-        font-size: 5rem;
+    a.navbar-brand, h2 {
+        font-size: xxx-large;
+    }
+
+    #tricks h2,#tricks h3{
+        font-size: xxx-large;
+    }
+
+    .navbar-toggler-icon{
+        font-size: xxx-large;
     }
 
     #mainNavbar {
@@ -62,9 +83,6 @@ p {
         font-size: 5rem;
     }
 
-    p, h2 {
-        font-size: 5vw;
-    }
     i{
         font-size:30px;
     }

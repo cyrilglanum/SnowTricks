@@ -35,10 +35,6 @@ class Tricks extends AbstractType
      */
     private $description;
 
-//    /**
-//     * @ORM\Column(type="string", length=255)
-//     */
-//    private $media_urls;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
