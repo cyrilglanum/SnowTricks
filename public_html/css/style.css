@@ -63,8 +63,12 @@ p {
         display: block
     }
 
-    .navbar-brand {
-        font-size: 5rem;
+    a.navbar-brand, h2 {
+        font-size: xxx-large;
+    }
+
+    #tricks h2,#tricks h3{
+        font-size: xxx-large;
     }
 
     .navbar-toggler-icon{
@@ -79,9 +83,6 @@ p {
         font-size: 5rem;
     }
 
-    p, h2 {
-        font-size: 5vw;
-    }
     i{
         font-size:30px;
     }
