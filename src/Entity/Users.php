@@ -28,6 +28,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     private $email;
 
     /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $tokenResetPassword;
+
+    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -68,6 +73,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getTokenResetPassword(): ?string
+    {
+        return $this->tokenResetPassword;
+    }
+
+    public function setTokenResetPassword(string $tokenResetPassword): self
+    {
+        $this->tokenResetPassword = $tokenResetPassword;
 
         return $this;
     }
