@@ -97,7 +97,6 @@ class ResetPasswordController extends AbstractController
                 $token_form = $form->getData()->attributes->get('token');
 
                 if ($token_form === $user->getTokenResetPassword()) {
-//                    $user->setPassword($form->getData()->request->get('reset_password')['newPassword']);
                     $user->setPassword(
                         $userPasswordHasherInterface->hashPassword(
                             $user,
@@ -117,8 +116,6 @@ class ResetPasswordController extends AbstractController
                     $this->addFlash('error', 'Une erreur a eu lieu lors de la modification, veuillez réessayer.');
                     $this->redirectToRoute('app_home');
                 }
-
-
             }
 
             return $this->render('reset_password/reset2.html.twig', array(
@@ -152,49 +149,6 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_reset_password_with_token');
         }
     }
-
-//        $token = $this->getTokenFromSession();
-//        if (null === $token) {
-//            throw $this->createNotFoundException('No reset password token found in the URL or in the session.');
-//        }
-//
-//        try {
-//            $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
-//        } catch (ResetPasswordExceptionInterface $e) {
-//            $this->addFlash('reset_password_error', sprintf(
-//                'There was a problem validating your reset request - %s',
-//                $e->getReason()
-//            ));
-//
-//            return $this->redirectToRoute('app_forgot_password_request');
-//        }
-//
-//        // The token is valid; allow the user to change their password.
-//        $form = $this->createForm(ChangePasswordFormType::class);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            // A password reset token should be used only once, remove it.
-//            $this->resetPasswordHelper->removeResetRequest($token);
-//
-//            // Encode(hash) the plain password, and set it.
-//            $encodedPassword = $userPasswordHasherInterface->hashPassword(
-//                $user,
-//                $form->get('plainPassword')->getData()
-//            );
-//
-//            $user->setPassword($encodedPassword);
-//            $this->getDoctrine()->getManager()->flush();
-//
-//            // The session is cleaned up after the password has been changed.
-//            $this->cleanSessionAfterReset();
-//
-//            return $this->redirectToRoute('app_login');
-//        }
-//
-//        return $this->render('reset_password/reset.html.twig', [
-//            'resetForm' => $form->createView(),
-//        ]);
 
 
     private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404{% endblock %}
+
+{% block body %}
+
+    {% if message is defined %}
+        {{ message }}
+    {% endif %}
+
+    <div class="container mt-5" >
+
+        <h2>ERROR 404 Vous êtes tombé sur un os qui ne peut pas être rongé !</h2>
+
+    </div>
+{% endblock %}

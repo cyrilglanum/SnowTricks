@@ -32,8 +32,11 @@ class IndexController extends AbstractController
     {
         $user = $this->getDoctrine()->getManager()->getRepository(Users::class)->find($id);
 
-            return $this->render('profil/profil.html.twig', array('user'=> $user));
+        if (!$user) {
+            return $this->render('404.html.twig');
         }
+        return $this->render('profil/profil.html.twig', array('user' => $user));
+    }
 
     /**
      * @Route("/profil/edit/{id}", name="editProfil", methods={"GET"})

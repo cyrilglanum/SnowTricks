@@ -21,8 +21,8 @@ class MediaController extends AbstractController
     public function new(Request $request, SluggerInterface $slugger, Tricks $trick)
     {
         $media = new Media();
-        if ($trick === null) {
-            return $this->redirect('/');
+        if (!$trick) {
+            return $this->render('404.html.twig');
         }
         $form = $this->createForm(AddMediaType::class, $media);
 
@@ -89,7 +89,7 @@ class MediaController extends AbstractController
     public function deleteMedia($trick_id,$media_id)
     {
         if ($media_id === null) {
-            return $this->redirect('/');
+            return $this->render('404.html.twig');
         }
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -98,6 +98,10 @@ class MediaController extends AbstractController
         $entityManager->flush();
 
         $trick = $entityManager->getRepository(Tricks::class)->find($trick_id);
+
+        if (!$trick) {
+            return $this->render('404.html.twig');
+        }
 
         return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
     }
