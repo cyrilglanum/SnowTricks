@@ -18,8 +18,8 @@
                        aria-controls="v-pills-home" aria-selected="true">Informations</a>
                     <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
                        aria-controls="v-pills-settings" aria-selected="false">Photo</a>
-{#                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"#}
-{#                       aria-controls="v-pills-messages" aria-selected="false">Vos tricks</a>#}
+                    {# <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" #}
+                    {# aria-controls="v-pills-messages" aria-selected="false">Vos tricks</a> #}
                 </div>
             </div>
 
@@ -31,12 +31,12 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
-                                       aria-describedby="emailHelp" value="{{ user.email }}">
+                                       aria-describedby="emailHelp" value="{{ user.email }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="identifiant">Identifiant</label>
                                 <input type="identifiant" class="form-control" id="identifiant" name="identifiant"
-                                       aria-describedby="emailHelp" value="{{ user.pseudo }}">
+                                       aria-describedby="emailHelp" value="{{ user.pseudo }}" readonly>
                             </div>
                         </form>
 
@@ -50,11 +50,20 @@
                     </div>
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                          aria-labelledby="v-pills-settings-tab">
-                        <img src="{{ asset('uploads/tricksFile') }}/{{ user.image }}" alt="..." class="img-thumbnail">
+
+                        {% if user.image is not null %}
+                            <img src="{{ asset('uploads/tricksFile') }}/{{ user.image }}" alt="..."
+                                 class="img-thumbnail">
+                            {% else %}
+                                <span>Vous n'avez pas de photo, ajoutez en une maintenant !</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-            <a href="{{ url('editProfil', {'id' : user.id}) }}" ><button class="btn btn-primary" >Modifier mon profil</button></a>
+            <a href="{{ url('editProfil', {'id' : user.id}) }}">
+                <button class="btn btn-primary" style="border-radius: 5px
+">Modifier mon profil</button>
+            </a>
         </div>
     </div>
 {% endblock %}
