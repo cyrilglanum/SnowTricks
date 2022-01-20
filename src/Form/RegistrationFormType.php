@@ -22,7 +22,8 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('username', TextType::class, ['help' => "* Votre pseudo dans l'application",
                 "attr" => [
-                    'class' => 'col-12 mb-3'
+                    'class' => 'col-12 mb-3',
+                    'maxlength' => 8
                 ],
                 'label' => "Identifiant",
                 'invalid_message' => 'L\'identifiant est requis.',
