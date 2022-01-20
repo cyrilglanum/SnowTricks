@@ -37,11 +37,13 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
-                        $brochureFile->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                            $brochureFile->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        }
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),
@@ -91,11 +93,13 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
-                        $brochureFile->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                            $brochureFile->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        }
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),

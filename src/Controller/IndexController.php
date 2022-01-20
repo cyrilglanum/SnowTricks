@@ -69,11 +69,13 @@ class IndexController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
-                        $brochureFile->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                            $brochureFile->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        }
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),
@@ -89,7 +91,7 @@ class IndexController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success', 'Le trick a bien été modifié.');
+            $this->addFlash('success', 'Votre profil a bien été modifié.');
 
             return $this->redirectToRoute('app_home');
         }

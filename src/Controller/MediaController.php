@@ -41,11 +41,13 @@ class MediaController extends AbstractController
                 $media->setUrl($newFilename);
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
-                        $file->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
+                    if (isset($_SERVER['HTTP_HOST'])) {
+                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                            $file->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        }
                     } else {
                         $file->move(
                             $this->getParameter('trickFiles'),
@@ -57,9 +59,9 @@ class MediaController extends AbstractController
                     return $e;
                 }
             } elseif ($form->getData()->getType() === "VID") {
-                if(str_contains($form->getData()->getUrlVideo(),"https://youtu.be")){
-                    $media->setUrl("https://www.youtube.com/embed/".explode("/",$form->getData()->getUrlVideo())[3]);
-                }else{
+                if (str_contains($form->getData()->getUrlVideo(), "https://youtu.be")) {
+                    $media->setUrl("https://www.youtube.com/embed/" . explode("/", $form->getData()->getUrlVideo())[3]);
+                } else {
                     $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
                     return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
                 }
@@ -86,7 +88,7 @@ class MediaController extends AbstractController
     /**
      * @Route("/media/delete/{trick_id}/{media_id}", name="deleteMedia")
      */
-    public function deleteMedia($trick_id,$media_id)
+    public function deleteMedia($trick_id, $media_id)
     {
         if ($media_id === null) {
             return $this->render('404.html.twig');
