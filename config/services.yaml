@@ -6,8 +6,10 @@
 parameters:
 #    local
     trickFiles: '%kernel.project_dir%/public/uploads/tricksFile'
-#    prod
+#    true prod
 #    prodTrickFiles: '%kernel.project_dir%/public_html/uploads/tricksFile'
+#   false prod
+    prodTrickFiles: '%kernel.project_dir%/public/uploads/tricksFile'
 
 services:
     # default configuration for services in *this* file
