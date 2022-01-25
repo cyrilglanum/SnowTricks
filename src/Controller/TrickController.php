@@ -10,6 +10,7 @@ use App\Form\TrickType;
 use http\Env;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -154,15 +155,20 @@ class TrickController extends AbstractController
     {
         $min = $request->request->get('min');
         $max = $request->request->get('max');
-        $num_page = $request->request->get('numpage') ;
+        $num_page = $request->request->get('numpage');
 
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
-            ->findBy(array(),null , 4*$num_page, $num_page-1 ?? $num_page);
-        dd($tricks);
+            ->findBy(array(), null, 4 * $num_page, $num_page - 1 ?? $num_page);
+
+
+        foreach ($tricks as $trick){
+
+            $output[]=array($trick->getId(),$trick->getName());
+        }
+        return new JsonResponse($output);
 
 //        dd($this->getDoctrine()->getManager()->getRepository(Tricks::class)->findAll());
-//        return $this->getDoctrine()->getManager()->getRepository(Tricks::class)->
 
     }
 
