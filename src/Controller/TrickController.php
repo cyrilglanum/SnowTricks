@@ -148,6 +148,25 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @Route("/getTricks", name="getTrickAjax", methods={"POST"})
+     */
+    public function getTricks(Request $request)
+    {
+        $min = $request->request->get('min');
+        $max = $request->request->get('max');
+        $num_page = $request->request->get('numpage') ;
+
+        $tricks = $this->getDoctrine()
+            ->getRepository(Tricks::class)
+            ->findBy(array(),null , 4*$num_page, $num_page-1 ?? $num_page);
+        dd($tricks);
+
+//        dd($this->getDoctrine()->getManager()->getRepository(Tricks::class)->findAll());
+//        return $this->getDoctrine()->getManager()->getRepository(Tricks::class)->
+
+    }
+
+    /**
      * @Route("/trick/delete/{id}", name="deleteTrick", methods={"GET"})
      */
     public function deleteTrick($id)

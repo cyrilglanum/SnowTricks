@@ -7,6 +7,7 @@
         <img src="{{ asset('snow2.jpg') }}" style="width: 100%; height:900px">
 
         <div class="container mt-5" id="tricks">
+            <button id="loadBtn">Load more</button>
             <h2 class="mt-3 mb-5">Figures</h2>
             <div class="col-12">
                 <div class="row">
@@ -34,6 +35,7 @@
                         </div>
                     {% endfor %}
 
+
                 </div>
 
             </div>
@@ -41,5 +43,58 @@
     </div>
 
 
+
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '#loadBtn', function () {
+
+                console.log($)
+                console.log('la');
+                // var row = Number($('#row').val());
+                // var count = Number($('#postCount').val());
+                // var limit = 3;
+                // row = row + limit;
+                // $('#row').val(row);
+                $("#loadBtn").val('Loading...');
+
+                var min = 4;
+                var max = 8;
+                var numpage = 1;
+
+                $.ajax({
+                    url: '/getTricks',
+                    type: 'POST',
+                    data: {"min": min, "max": max, "numpage" : numpage}
+                }).done(function (data) {
+
+                    //ajouter les articles
+
+                }).fail(function () {
+
+                    //some code going here if error
+
+                });
+
+
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: 'loadmore-data.php',
+            //     data: 'row=',
+            //     success: function (data) {
+            //         var rowCount = row + limit;
+            //         $('.postList').append(data);
+            //         if (rowCount >= count) {
+            //             $('#loadBtn').css("display", "none");
+            //         } else {
+            //             $("#loadBtn").val('Load More');
+            //         }
+            //     }
+            // });
+        });
+        })
+        ;
+    </script>
 
 {% endblock %}
