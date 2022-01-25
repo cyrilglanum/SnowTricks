@@ -28,23 +28,23 @@
 }
 
 .fa, .fas {
-    color:midnightblue;
+    color: midnightblue;
 }
 
 .fa-arrow-down {
-    color:whitesmoke;
+    color: whitesmoke;
 }
 
 h2 {
     font-size: 2vw;
-    font-weight: 500!important;
-    color: midnightblue!important;
+    font-weight: 500 !important;
+    color: midnightblue !important;
 }
 
 h3 {
     font-size: 1.8vw;
-    font-weight: 400!important;
-    color: midnightblue!important;
+    font-weight: 400 !important;
+    color: midnightblue !important;
 }
 
 
@@ -55,23 +55,23 @@ p {
 }
 
 @media screen and (max-width: 992px) {
-    #background-img{
+    #background-img {
         display: none
     }
 
-    h1, label,input{
-        font-size: 3rem!important;
-    }
-
-    .form-control,a, h3{
+    h1, label, input {
         font-size: 3rem !important;
     }
 
-    span, button{
+    .form-control, a, h3 {
+        font-size: 3rem !important;
+    }
+
+    span, button {
         font-size: 2.5rem !important;
     }
 
-    em, small{
+    em, small {
         font-size: 1.9rem !important;
     }
 
@@ -83,11 +83,11 @@ p {
         font-size: xxx-large;
     }
 
-    #tricks h2,#tricks h3{
+    #tricks h2, #tricks h3 {
         font-size: xxx-large;
     }
 
-    .navbar-toggler-icon{
+    .navbar-toggler-icon {
         font-size: xxx-large;
     }
 
@@ -99,8 +99,8 @@ p {
         font-size: 5rem;
     }
 
-    i{
-        font-size:30px;
+    i {
+        font-size: 30px;
     }
 }
 
