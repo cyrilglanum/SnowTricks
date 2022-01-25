@@ -41,7 +41,7 @@ class MediaController extends AbstractController
                 $media->setUrl($newFilename);
                 // Move the file to the directory where brochures are stored
                 try {
-                        if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
+                        if ($this->getParameter('prodTrickFiles')) {
                             $file->move(
                                 $this->getParameter('prodTrickFiles'),
                                 $newFilename
