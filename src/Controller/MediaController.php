@@ -29,7 +29,7 @@ class MediaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $media->setDescription($form->getData()->getDescription());
+            $media->setDescription(htmlspecialchars($form->getData()->getDescription()));
             $media->setType($form->getData()->getType());
             if ($form->getData()->getType() === "IMG") {
                 $file = $form->get('url')->getData();
@@ -41,13 +41,11 @@ class MediaController extends AbstractController
                 $media->setUrl($newFilename);
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (isset($_SERVER['HTTP_HOST'])) {
                         if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
                             $file->move(
                                 $this->getParameter('prodTrickFiles'),
                                 $newFilename
                             );
-                        }
                     } else {
                         $file->move(
                             $this->getParameter('trickFiles'),

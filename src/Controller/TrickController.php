@@ -26,7 +26,7 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName($form->getData()->getName());
+            $trick->setName(htmlspecialchars($form->getData()->getName()));
             $brochureFile = $form->get('img_background')->getData();
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -37,13 +37,11 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (isset($_SERVER['HTTP_HOST'])) {
                         if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
                             $brochureFile->move(
                                 $this->getParameter('prodTrickFiles'),
                                 $newFilename
                             );
-                        }
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),
@@ -54,7 +52,7 @@ class TrickController extends AbstractController
                     return $e;
                 }
             }
-            $trick->setDescription($form->get('description')->getData());
+            $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
             $trick->setDateCreation(new \DateTime('now'));
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
@@ -82,7 +80,7 @@ class TrickController extends AbstractController
 
         //soumission du form
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName($form->getData()->getName());
+            $trick->setName(htmlspecialchars($form->getData()->getName()));
             $brochureFile = $form->get('img_background')->getData();
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -93,13 +91,11 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                    if (isset($_SERVER['HTTP_HOST'])) {
                         if (str_contains('ocprojects.fr', $_SERVER['HTTP_HOST'])) {
                             $brochureFile->move(
                                 $this->getParameter('prodTrickFiles'),
                                 $newFilename
                             );
-                        }
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),
@@ -110,7 +106,7 @@ class TrickController extends AbstractController
                     return $e;
                 }
             }
-            $trick->setDescription($form->get('description')->getData());
+            $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
             $trick->setDateModification(new \DateTime('now'));
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
@@ -190,7 +186,7 @@ class TrickController extends AbstractController
 
         //soumission du form
         if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setMessage($form->get('message')->getData());
+            $comment->setMessage(htmlspecialchars($form->get('message')->getData()));
             $comment->setTrick($trick);
             $comment->setUser($this->getUser());
             $comment->setAuthor($this->getUser()->getEmail());
