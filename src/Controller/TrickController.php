@@ -37,11 +37,11 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $brochureFile->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $newFilename
-                            );
+                    if ($this->getParameter('prodTrickFiles')) {
+                        $brochureFile->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),
@@ -91,11 +91,11 @@ class TrickController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $brochureFile->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $newFilename
-                            );
+                    if ($this->getParameter('prodTrickFiles')) {
+                        $brochureFile->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),

@@ -40,8 +40,7 @@ class ResetPasswordType extends AbstractType
                 'data' => $options['data']->attributes->get('token'),
                 'data_class' => null,
                 'mapped' => false,
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

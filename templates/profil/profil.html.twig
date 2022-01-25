@@ -54,15 +54,16 @@
                         {% if user.image is not null %}
                             <img src="{{ asset('uploads/tricksFile') }}/{{ user.image }}" alt="..."
                                  class="img-thumbnail">
-                            {% else %}
-                                <span>Vous n'avez pas de photo, ajoutez en une maintenant !</span>
+                        {% else %}
+                            <span>Vous n'avez pas de photo, ajoutez en une maintenant !</span>
                         {% endif %}
                     </div>
                 </div>
             </div>
             <a href="{{ url('editProfil', {'id' : user.id}) }}">
                 <button class="btn btn-primary" style="border-radius: 5px
-">Modifier mon profil</button>
+">Modifier mon profil
+                </button>
             </a>
         </div>
     </div>

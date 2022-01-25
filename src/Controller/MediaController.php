@@ -41,11 +41,11 @@ class MediaController extends AbstractController
                 $media->setUrl($newFilename);
                 // Move the file to the directory where brochures are stored
                 try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $file->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $newFilename
-                            );
+                    if ($this->getParameter('prodTrickFiles')) {
+                        $file->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
                     } else {
                         $file->move(
                             $this->getParameter('trickFiles'),

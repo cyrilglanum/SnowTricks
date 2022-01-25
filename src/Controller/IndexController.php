@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Tricks;
 use App\Entity\Users;
 use App\Form\UserUpdateType;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -69,11 +68,11 @@ class IndexController extends AbstractController
 
                 // Move the file to the directory where brochures are stored
                 try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $brochureFile->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $newFilename
-                            );
+                    if ($this->getParameter('prodTrickFiles')) {
+                        $brochureFile->move(
+                            $this->getParameter('prodTrickFiles'),
+                            $newFilename
+                        );
                     } else {
                         $brochureFile->move(
                             $this->getParameter('trickFiles'),

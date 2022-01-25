@@ -20,11 +20,10 @@ class ResetPasswordRequestFormType extends AbstractType
                         'message' => 'Please enter your email',
                     ]),
                     "attr" => [
-                    'class' => 'col-12 mb-3'
+                        'class' => 'col-12 mb-3'
+                    ],
                 ],
-                ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
