@@ -159,14 +159,16 @@ class TrickController extends AbstractController
 
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
-            ->findBy(array(), null, 4 * $num_page, $num_page - 1 ?? $num_page);
+            ->findBy(array(), null, 4, $min);
 
+        $output['limit_offset'] = ['min' => $min + 4, 'max'=> $max + 4];
+        $output['result'] = [];
 
         foreach ($tricks as $trick){
 
-            $output[]=array($trick->getId(),$trick->getName());
+            $output['result'][]=array($trick->getId(),$trick->getName(),$trick->getImgBackground(),$trick->getDateCreation()->format(('d-m-Y à H:i:s')));
         }
-        return new JsonResponse($output);
+        return new JsonResponse($output,);
 
 //        dd($this->getDoctrine()->getManager()->getRepository(Tricks::class)->findAll());
 
