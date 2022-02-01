@@ -52,7 +52,7 @@ class IndexController extends AbstractController
             return $this->render('404.html.twig');
         }
 
-        $form = $this->createForm(UserUpdateType::class, $user, null);
+        $form = $this->createForm(UserUpdateType::class, $user);
         $form->handleRequest($request);
 
         //soumission du form

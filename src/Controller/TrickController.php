@@ -23,7 +23,7 @@ class TrickController extends AbstractController
     public function new(Request $request, SluggerInterface $slugger)
     {
         $trick = new Tricks();
-        $form = $this->createForm(TrickType::class, $trick, null);
+        $form = $this->createForm(TrickType::class, $trick);
         $user = $this->getUser();
 
         $form->handleRequest($request);
