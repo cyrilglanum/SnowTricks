@@ -24,7 +24,7 @@ class MediaController extends AbstractController
         if (!$trick) {
             return $this->render('404.html.twig');
         }
-        $form = $this->createForm(AddMediaType::class, $media);
+        $form = $this->createForm(AddMediaType::class, $media, null);
 
         $form->handleRequest($request);
 
@@ -79,7 +79,6 @@ class MediaController extends AbstractController
 
         return $this->render('medias/newMedia.html.twig', array(
             'form' => $form->createView(),
-            'message' => $message ?? null
         ));
     }
 

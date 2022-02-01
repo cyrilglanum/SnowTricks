@@ -143,9 +143,8 @@ class ResetPasswordController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                dd('la');
+                print_r('le formulaire a été soumis.');
             }
-            dd('oco');
             return $this->redirectToRoute('app_reset_password_with_token');
         }
     }

@@ -23,7 +23,7 @@ class TrickController extends AbstractController
     public function new(Request $request, SluggerInterface $slugger)
     {
         $trick = new Tricks();
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, null);
         $user = $this->getUser();
 
         $form->handleRequest($request);
@@ -76,7 +76,7 @@ class TrickController extends AbstractController
     public function updateForm(Request $request, $trick_id, SluggerInterface $slugger)
     {
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($trick_id);
-        $form = $this->createForm(TrickType::class, $trick);
+        $form = $this->createForm(TrickType::class, $trick, null);
 
         $form->handleRequest($request);
 
@@ -132,7 +132,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{id}", name="trick", methods={"GET"})
      */
-    public function trick(Request $request, $id)
+    public function trick($id)
     {
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
 
@@ -155,7 +155,6 @@ class TrickController extends AbstractController
     {
         $min = $request->request->get('min');
         $max = $request->request->get('max');
-        $num_page = $request->request->get('numpage');
 
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
@@ -169,8 +168,6 @@ class TrickController extends AbstractController
             $output['result'][]=array($trick->getId(),$trick->getName(),$trick->getImgBackground(),$trick->getDateCreation()->format(('d-m-Y à H:i:s')));
         }
         return new JsonResponse($output,);
-
-//        dd($this->getDoctrine()->getManager()->getRepository(Tricks::class)->findAll());
 
     }
 

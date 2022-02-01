@@ -30,7 +30,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/profil/{id}", name="profil", methods={"GET"})
      */
-    public function profil(Request $request, $id)
+    public function profil($id)
     {
         $user = $this->getDoctrine()->getManager()->getRepository(Users::class)->find($id);
 
@@ -52,7 +52,7 @@ class IndexController extends AbstractController
             return $this->render('404.html.twig');
         }
 
-        $form = $this->createForm(UserUpdateType::class, $user);
+        $form = $this->createForm(UserUpdateType::class, $user, null);
         $form->handleRequest($request);
 
         //soumission du form
@@ -103,7 +103,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/testing/{id}", name="testing", methods={"GET"})
      */
-    public function test(Request $request, $id)
+    public function test($id)
     {
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
         $comments = $trick->getComments()->getValues();

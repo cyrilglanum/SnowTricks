@@ -61,7 +61,7 @@
             $.ajax({
                 url: '/getTricks',
                 type: 'POST',
-                data: {"min": offset, "max": limit, "numpage": numpage}
+                data: {"min": offset, "max": limit}
             }).done(function (data) {
 
                 var template = `<div class="col-sm-12 col-md-9 col-xl-3">
