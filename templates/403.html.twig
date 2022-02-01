@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}404{% endblock %}
+
+{% block body %}
+
+    {% if message is defined %}
+        {{ message }}
+    {% endif %}
+
+    <div class="container mt-5">
+
+        <h2>ERROR 403 Vous devez être connecté pour pouvoir poster un message !</h2>
+        <a href="{{ url('app_login') }}" style="color:black !important">Se connecter ici</a>
+
+    </div>
+{% endblock %}

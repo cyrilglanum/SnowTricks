@@ -148,7 +148,12 @@ class IndexController extends AbstractController
      */
     public function newComment(Request $request)
     {
+        if(is_null($this->getUser())){
+            return $this->render('403.html.twig');
+        }
+
         $user_id = $this->getUser()->getId();
+
         $comment = new Comments();
 
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find(9999999);
