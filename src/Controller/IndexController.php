@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comments;
 use App\Entity\Tricks;
 use App\Entity\Users;
+use App\Form\CommentType;
+use App\Form\Comment0Type;
 use App\Form\UserUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -118,5 +121,92 @@ class IndexController extends AbstractController
                 'user' => $user
             ]
         );
+    }
+
+    /**
+     * @Route("/forum", name="forum", methods={"GET"})
+     */
+    public function forum()
+    {
+        $comments = $this->getDoctrine()->getManager()->getRepository(Comments::class)->findBy(
+            ['trick_id' => 9999999],
+            ['created_at' => 'DESC']
+        );
+
+        $user = $this->getUser();
+
+        return $this->render('index/forum.html.twig',
+            [
+                'comments' => $comments,
+                'user' => $user
+            ]
+        );
+    }
+
+    /**
+     * @Route("/forum/comment/add", name="newComment", methods={"GET","POST"})
+     */
+    public function newComment(Request $request)
+    {
+        $user_id = $this->getUser()->getId();
+        $comment = new Comments();
+
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find(9999999);
+        $form = $this->createForm(Comment0Type::class, ['trick'=> 9999999, 'user_id' => $user_id]);
+
+        $form->handleRequest($request);
+
+        //soumission du form
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setMessage(htmlspecialchars($form->get('message')->getData()));
+            $comment->setIdTrick($form->get('trick_id')->getData());
+            $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
+            $comment->setAuthor($this->getUser()->getEmail());
+            $comment->setCreatedAt(new \DateTimeImmutable('now'));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('forum');
+        }
+
+//        if ($trick !=) {
+//            return $this->render('404.html.twig');
+//        }
+
+        return $this->render('comments/commentForm.html.twig', [
+            'user' => $this->getUser(),
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+
+    /**
+     * @Route("/comment/delete/{id}", name="deleteComment", methods={"GET"})
+     */
+    public function deleteComment($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $comment = $entityManager->getRepository(Comments::class)->find($id);
+
+        if (!$comment) {
+            return $this->render('404.html.twig');
+        }
+
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
+        $comments = $entityManager->getRepository(Comments::class)->findAll();
+
+        $this->addFlash('success', 'Le commentaire a bien été supprimé.');
+
+        return $this->redirectToRoute('forum', [
+            'comments' => $comments,
+            'user' => $this->getUser(),
+        ]);
     }
 }

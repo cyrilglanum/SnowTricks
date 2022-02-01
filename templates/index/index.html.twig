@@ -56,8 +56,6 @@
         function getTricks() {
             $("#loadBtn").val('Loading...');
 
-            var numpage = 1;
-
             $.ajax({
                 url: '/getTricks',
                 type: 'POST',

@@ -23,7 +23,7 @@ class Comments
     private $author;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=1000)
      */
     private $message;
 
