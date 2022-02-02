@@ -9,7 +9,7 @@
 
 
     <div class="container">
-        <h1>Votre profil</h1>
+        <h2 class="mt-3 mb-5">Votre profil</h2>
 
         <div class="row">
             <div class="col-3">
@@ -27,7 +27,7 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
                          aria-labelledby="v-pills-home-tab">
-                        <form action="savePassword" method="POST">
+                        <form action="" method="POST">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
                                 <input type="email" class="form-control" id="email" name="email"
@@ -61,8 +61,7 @@
                 </div>
             </div>
             <a href="{{ url('editProfil', {'id' : user.id}) }}">
-                <button class="btn btn-primary" style="border-radius: 5px
-">Modifier mon profil
+                <button class="btn btn-dark" style="border-radius: 5px">Modifier mon profil
                 </button>
             </a>
         </div>
