@@ -13,7 +13,7 @@
             <div class="col-12">
                 <div class="row" id="tricksPage">
                 </div>
-                <button id="loadBtn" class="btn btn-primary mb-3">Load more</button>
+                <button id="loadBtn" class="btn btn-dark mb-3">Charger plus de tricks</button>
                 {# <div class="row"> #}
                 {# {% for trick in tricks %} #}
                 {# <div class="col-sm-12 col-md-9 col-xl-3"> #}
@@ -70,7 +70,7 @@
                                             src="{{ asset('uploads/tricksFile') }}/{{ "--imgBg--" }}"
                                             width="100%" style="max-height: 240px">
                                 </a></div>
-                            <em> crée le --dateTrick--</em><br>
+                            <em> créée le --dateTrick--</em><br>
                             {% if user.email is defined %}
                                 {% if user.email == "cyril@glanum.com" %}
                                     <a href="{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}"><i class="fas fa-edit"></i></a>
