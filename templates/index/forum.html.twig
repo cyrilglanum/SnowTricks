@@ -11,28 +11,31 @@
 
             <h2 class="mt-3 mb-5">Forum</h2>
 
-            <a class="" href="{{ url('newComment') }}"><button class="btn btn-dark mb-3" style="border-radius: 5px
-">Ajouter commentaire</button></a>
-            <div class="col-12">
-                    {% for comment in comments %}
+            <a class="" href="{{ url('newComment') }}">
+                <button class="btn btn-dark mb-3" style="border-radius: 5px
+">Ajouter commentaire
+                </button>
+            </a>
+            <div class="col-12" style="margin-bottom: 100px">
+                {% for comment in comments %}
                     <div class="col-sm-12 col-md-12 col-xl-12">
                         <h3>{{ comment.author }}</h3>
                         <br>
                         <p>{{ comment.message }}</p>
-                    <em> créée le {{ comment.createdAt|date('Y-m-d à H:i:s') }}</em><br>
-                    {% if user.email is defined %}
-                        {% if user.email == "cyril@glanum.com" %}
-                            <a href="{{ url('deleteComment',{'id' : comment.id}) }}"
-                               onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
-                                        class="fas fa-trash"></i>
-                            </a>
+                        <em> créée le {{ comment.createdAt|date('Y-m-d à H:i:s') }}</em><br>
+                        {% if user.email is defined %}
+                            {% if user.email == "cyril@glanum.com" %}
+                                <a href="{{ url('deleteComment',{'id' : comment.id}) }}"
+                                   onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
+                                            class="fas fa-trash"></i>
+                                </a>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                    <hr>
-                </div>
-            {% endfor %}
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
 
 {% endblock %}

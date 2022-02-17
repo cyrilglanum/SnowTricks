@@ -112,5 +112,11 @@ p {
     i {
         font-size: 30px;
     }
-}
+    .alert {
+        font-size: 4vw;
+    }
 
+    p {
+        font-size: 4vw;
+    }
+}

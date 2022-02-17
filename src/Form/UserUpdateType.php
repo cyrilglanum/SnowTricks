@@ -34,7 +34,7 @@ class UserUpdateType extends AbstractType
 //            ])
             ->add('image', FileType::class, [
                 "attr" => [
-                    'class' => 'col-12 mb-3'
+                    'class' => 'col-12 mb-3 mb-3'
                 ],
                 'mapped' => false,
                 'required' => false,
