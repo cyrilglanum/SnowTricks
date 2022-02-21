@@ -29,7 +29,23 @@ class TrickType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'label' => 'Image de présentation',
-
+            ])
+            ->add('images', FileType::class, [
+                "attr" => [
+                    'class' => 'col-12 mb-3'
+                ],
+                'mapped' => false,
+                'required' => false,
+                'multiple' => true,
+            ])
+            ->add('videos', TextType::class, [
+                "attr" => [
+                    'class' => 'col-12 mb-3'
+                ],
+                'mapped' => false,
+                'required' => false,
+                'label' => 'videos intégrées',
+                'help' => 'Url séparées par une ","',
             ])
             ->add('description', TextType::class, [
                 "attr" => [

@@ -148,7 +148,7 @@ class Tricks extends AbstractType
     }
 
       /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick")
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick",cascade={"all"})
      */
     private $medias;
 
@@ -166,6 +166,16 @@ class Tricks extends AbstractType
 
         return $this;
     }
+
+
+    public function addMedia(Media $media){
+        dd('fonction addmedia');
+        if(!$this->medias->contains($media)){
+            $this->medias[] = $media;
+//            $media->setUrl($this);
+        }
+    }
+
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comments", mappedBy="trick")
