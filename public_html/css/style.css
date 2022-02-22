@@ -56,6 +56,10 @@ p {
     text-overflow: ellipsis;
 }
 
+.alert {
+        font-size: 2vw;
+    }
+
 @media screen and (max-width: 992px) {
     #background-img {
         display: none
@@ -112,8 +116,9 @@ p {
     i {
         font-size: 30px;
     }
+
     .alert {
-        font-size: 4vw;
+        font-size: 1vw;
     }
 
     p {
