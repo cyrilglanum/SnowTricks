@@ -4,10 +4,14 @@
 namespace App\Controller;
 
 use App\Entity\Comments;
+use App\Entity\Media;
 use App\Entity\Tricks;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\Repository\MediaRepository;
+use App\Repository\TricksRepository;
 use http\Env;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +24,7 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/new", name="newTrick")
      */
-    public function new(Request $request, SluggerInterface $slugger)
+    public function new(Request $request, SluggerInterface $slugger, TricksRepository $tricksRepository)
     {
         $trick = new Tricks();
         $form = $this->createForm(TrickType::class, $trick);
@@ -28,7 +32,149 @@ class TrickController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName(htmlspecialchars($form->getData()->getName()));
+            $em = $this->getDoctrine()->getManager();
+
+            $name = htmlspecialchars($form->getData()->getName());
+
+            $trick_name_exist = $tricksRepository->findBy(array('name' => $name), $orderBy = null, $limit = null, $offset = null);
+
+            if (!$trick_name_exist) {
+                $trick->setName($name);
+                $brochureFile = $form->get('img_background')->getData();
+                if ($brochureFile) {
+                    $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    // this is needed to safely include the file name as part of the URL
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
+                    $trick->setImgBackground($newFilename);
+
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        if ($this->getParameter('prodTrickFiles')) {
+                            $brochureFile->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $newFilename
+                            );
+                        } else {
+                            $brochureFile->move(
+                                $this->getParameter('trickFiles'),
+                                $newFilename
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
+                    }
+                }
+                $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
+                $trick->setDateCreation(new \DateTime('now'));
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($trick);
+                $em->flush();
+
+                //ajout des médias lors de la création du trick
+                $medias = $form->get('images')->getData();
+
+                foreach ($medias as $image) {
+                    $file = md5(uniqid()) . '.' . $image->guessExtension();
+
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        if ($this->getParameter('prodTrickFiles')) {
+                            $image->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $file
+                            );
+                        } else {
+                            $image->move(
+                                $this->getParameter('trickFiles'),
+                                $file
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
+                    }
+
+                    $img = new Media();
+                    $img->setUrl($file);
+                    $img->setType('IMG');
+                    $img->setTrick($trick);
+                    $img->setDescription('');
+                    $img->setCreatedAt(new \DateTimeImmutable('now'));
+                    $em->persist($img);
+                    $em->flush();
+                }
+                //ajout des vidéos embed lors de la création du trick
+
+                $videos = $form->get('videos')->getData();
+
+                $exploded_videos = explode(',', $videos);
+                foreach ($exploded_videos as $video_string) {
+                    $video = new Media();
+
+                    if (str_contains($video_string, "https://youtu.be")) {
+                        $video->setUrl("https://www.youtube.com/embed/" . explode("/", $video_string)[3]);
+                    } else {
+                        $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
+                        return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
+                    }
+
+                    $video->setType('VID');
+                    $video->setTrick($trick);
+                    $video->setDescription('');
+                    $video->setUrlVideo($video_string);
+                    $video->setCreatedAt(new \DateTimeImmutable('now'));
+                    $em->persist($video);
+                    $em->flush();
+                }
+
+                $this->addFlash('success', 'Le trick a bien été ajouté.');
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('error', 'Le trick existe déjà.');
+                return $this->redirectToRoute('app_home');
+            }
+        }
+
+        return $this->render('tricks/newTrick.html.twig', array(
+            'form' => $form->createView(),
+            'trick' => $trick,
+            'user' => $user,
+        ));
+    }
+
+    /**
+     * @Route("/trick/editForm/{trick_id}", name="editTrick")
+     */
+    public function updateForm(Request $request, $trick_id, SluggerInterface $slugger)
+    {
+
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($trick_id);
+        $form = $this->createForm(TrickType::class, $trick);
+
+        if (!$trick) {
+            return $this->render('404.html.twig');
+        }
+
+        $form->handleRequest($request);
+
+        //soumission du form
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $mediaToDeleteTab = $request->get('media_to_delete');
+
+            if ($mediaToDeleteTab) {
+                foreach ($mediaToDeleteTab as $med) {
+                    $mediaTodelete = $em->getRepository(Media::class)->find($med);
+                    $em->remove($mediaTodelete);
+                    $em->flush();
+                }
+            }
+
+            $name = htmlspecialchars($form->getData()->getName());
+
+            $trick->setName($name);
             $brochureFile = $form->get('img_background')->getData();
             if ($brochureFile) {
                 $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
@@ -56,71 +202,73 @@ class TrickController extends AbstractController
             }
             $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
             $trick->setDateCreation(new \DateTime('now'));
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
-            $this->addFlash('success', 'Le trick a bien été ajouté.');
-            return $this->redirectToRoute('app_home');
-        }
 
-        return $this->render('tricks/newTrick.html.twig', array(
-            'form' => $form->createView(),
-            'trick' => $trick,
-            'user' => $user,
-        ));
-    }
+            //ajout des médias lors de la création du trick
+            $medias = $form->get('images')->getData();
 
-    /**
-     * @Route("/trick/editForm/{trick_id}", name="editTrick")
-     */
-    public function updateForm(Request $request, $trick_id, SluggerInterface $slugger)
-    {
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($trick_id);
-        $form = $this->createForm(TrickType::class, $trick, null);
+            if ($medias) {
+                foreach ($medias as $image) {
+                    $file = md5(uniqid()) . '.' . $image->guessExtension();
 
-        $form->handleRequest($request);
-
-        //soumission du form
-        if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setName(htmlspecialchars($form->getData()->getName()));
-            $brochureFile = $form->get('img_background')->getData();
-            if ($brochureFile) {
-                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $brochureFile->guessExtension();
-                $trick->setImgBackground($newFilename);
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    if ($this->getParameter('prodTrickFiles')) {
-                        $brochureFile->move(
-                            $this->getParameter('prodTrickFiles'),
-                            $newFilename
-                        );
-                    } else {
-                        $brochureFile->move(
-                            $this->getParameter('trickFiles'),
-                            $newFilename
-                        );
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        if ($this->getParameter('prodTrickFiles')) {
+                            $image->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $file
+                            );
+                        } else {
+                            $image->move(
+                                $this->getParameter('trickFiles'),
+                                $file
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
                     }
-                } catch (FileException $e) {
-                    return $e;
+
+                    $img = new Media();
+                    $img->setUrl($file);
+                    $img->setType('IMG');
+                    $img->setTrick($trick);
+                    $img->setDescription('');
+                    $img->setCreatedAt(new \DateTimeImmutable('now'));
+                    $em->persist($img);
+                    $em->flush();
                 }
             }
-            $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
-            $trick->setDateModification(new \DateTime('now'));
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trick);
-            $em->flush();
+            //ajout des vidéos embed lors de la création du trick
 
-            $this->addFlash('success', 'Le trick a bien été modifié.');
+            $videos = $form->get('videos')->getData();
 
+            if ($videos) {
+                $exploded_videos = explode(',', $videos);
+                foreach ($exploded_videos as $video_string) {
+                    $video = new Media();
+
+                    if (str_contains($video_string, "https://youtu.be")) {
+                        $video->setUrl("https://www.youtube.com/embed/" . explode("/", $video_string)[3]);
+                    } else {
+                        $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
+                        return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
+                    }
+
+                    $video->setType('VID');
+                    $video->setTrick($trick);
+                    $video->setDescription('');
+                    $video->setUrlVideo($video_string);
+                    $video->setCreatedAt(new \DateTimeImmutable('now'));
+                    $em->persist($video);
+                    $em->flush();
+                }
+            }
+
+            $this->addFlash('success', 'Le trick a bien été ajouté.');
             return $this->redirectToRoute('app_home');
-        }
-
-        if (!$trick) {
-            return $this->render('404.html.twig');
         }
 
         return $this->render('tricks/editTrick.html.twig', array(
@@ -160,12 +308,12 @@ class TrickController extends AbstractController
             ->getRepository(Tricks::class)
             ->findBy(array(), null, 4, $min);
 
-        $output['limit_offset'] = ['min' => $min + 4, 'max'=> $max + 4];
+        $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
         $output['result'] = [];
 
-        foreach ($tricks as $trick){
+        foreach ($tricks as $trick) {
 
-            $output['result'][]=array($trick->getId(),$trick->getName(),$trick->getImgBackground(),$trick->getDateCreation()->format(('d-m-Y à H:i:s')));
+            $output['result'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')));
         }
         return new JsonResponse($output,);
 

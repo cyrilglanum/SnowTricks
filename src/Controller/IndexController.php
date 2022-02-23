@@ -129,7 +129,7 @@ class IndexController extends AbstractController
     public function forum()
     {
         $comments = $this->getDoctrine()->getManager()->getRepository(Comments::class)->findBy(
-            ['trick_id' => 9999999],
+            ['trick_id' => 1],
             ['created_at' => 'DESC']
         );
 
@@ -156,8 +156,8 @@ class IndexController extends AbstractController
 
         $comment = new Comments();
 
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find(9999999);
-        $form = $this->createForm(Comment0Type::class, ['trick'=> 9999999, 'user_id' => $user_id]);
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find(1);
+        $form = $this->createForm(Comment0Type::class, ['trick'=> 1, 'user_id' => $user_id]);
 
         $form->handleRequest($request);
 

@@ -40,7 +40,7 @@ class TricksRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a');
         $qb->where($qb->expr()->not($qb->expr()->eq('a.' . $field, '?1')));
-        $qb->setParameter(9999999, $value);
+        $qb->setParameter(1, $value);
 
         return $qb->getQuery()
             ->getResult();
