@@ -152,28 +152,56 @@ class Tricks extends AbstractType
      */
     private $medias;
 
-    /**
-     * @return Collection|media[]
+//    /**
+//     * @return Collection|media[]
+//     */
+//    public function getMedias(): Collection
+//    {
+//        return $this->medias;
+//    }
+//
+//    public function setMedias(?string $medias): self
+//    {
+//        $this->medias = $medias;
+//
+//        return $this;
+//    }
+
+
+   /**
+     * @return Collection|Media[]
      */
     public function getMedias(): Collection
     {
         return $this->medias;
     }
 
-    public function setMedias(?string $medias): self
+    public function addMedia(Media $media): self
     {
-        $this->medias = $medias;
+
+        dd($media);
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
+            $media->setTricks($this);
+            $media->setUrl();
+            $media->setTricks($this);
+            $media->setTricks($this);
+        }
 
         return $this;
     }
 
-
-    public function addMedia(Media $media){
-        dd('fonction addmedia');
-        if(!$this->medias->contains($media)){
-            $this->medias[] = $media;
-//            $media->setUrl($this);
+    public function removeMedia(Media $media): self
+    {
+        if ($this->medias->contains($media)) {
+            $this->medias->removeElement($media);
+            // set the owning side to null (unless already changed)
+            if ($media->getTricks() === $this) {
+                $media->setTricks(null);
+            }
         }
+
+        return $this;
     }
 
 

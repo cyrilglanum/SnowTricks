@@ -5,7 +5,9 @@ namespace App\Form;
 
 use App\Entity\Tricks;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,13 +32,24 @@ class TrickType extends AbstractType
                 'required' => false,
                 'label' => 'Image de présentation',
             ])
-            ->add('images', FileType::class, [
+//            ->add('images', FileType::class, [
+//                "attr" => [
+//                    'class' => 'col-12 mb-3'
+//                ],
+//                'mapped' => false,
+//                'required' => false,
+//                'multiple' => true,
+//            ])
+//            ->add('medias', FileType::class, array('required' => false))
+            ->add('medias', CollectionType::class, [
                 "attr" => [
                     'class' => 'col-12 mb-3'
                 ],
-                'mapped' => false,
-                'required' => false,
-                'multiple' => true,
+                'entry_type' => MediaType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'by_reference' => false,
+
             ])
             ->add('videos', TextType::class, [
                 "attr" => [

@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\MediaRepository;
 use App\Repository\TricksRepository;
+use http\Client\Response;
 use http\Env;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,15 +69,18 @@ class TrickController extends AbstractController
                 $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
                 $trick->setDateCreation(new \DateTime('now'));
 
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($trick);
                 $em->flush();
-
                 //ajout des médias lors de la création du trick
-                $medias = $form->get('images')->getData();
 
-                foreach ($medias as $image) {
+//                $mediasImg = $form->get('medias')->getData();
+
+                foreach ($trick->getMedias() as $image) {
+                    dd($image);
                     $file = md5(uniqid()) . '.' . $image->guessExtension();
+                    dd($file);
 
                     // Move the file to the directory where brochures are stored
                     try {
@@ -381,4 +385,45 @@ class TrickController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/trick/add-image", name="addImage", methods={"POST"})
+     */
+    public function addImage(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $image = $request->files->get('upload');
+        $file = md5(uniqid()) . '.' . $image->guessExtension();
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        if ($this->getParameter('prodTrickFiles')) {
+                            $image->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $file
+                            );
+                        } else {
+                            $image->move(
+                                $this->getParameter('trickFiles'),
+                                $file
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
+                    }
+
+                    $img = new Media();
+                    $img->setUrl($file);
+                    $img->setType('IMG');
+                    $img->setDescription('');
+                    $img->setCreatedAt(new \DateTimeImmutable('now'));
+                    $img->setTrick(1);
+                    $em->persist($img);
+                    $em->flush();
+
+        return new JsonResponse(200, $img->getUrl());
+
+    }
+
+
 }
