@@ -178,12 +178,10 @@ class Tricks extends AbstractType
 
     public function addMedia(Media $media): self
     {
-
-        dd($media);
         if (!$this->medias->contains($media)) {
             $this->medias[] = $media;
             $media->setTricks($this);
-            $media->setUrl();
+//            $media->setUrl($media->getUrl());
             $media->setTricks($this);
             $media->setTricks($this);
         }

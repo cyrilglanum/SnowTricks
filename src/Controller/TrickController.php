@@ -14,6 +14,7 @@ use http\Client\Response;
 use http\Env;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,7 @@ class TrickController extends AbstractController
         $user = $this->getUser();
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
@@ -71,41 +73,45 @@ class TrickController extends AbstractController
 
 
                 $em = $this->getDoctrine()->getManager();
+
+                $medias = $request->files->get('trick')['medias'] ?? null;
+                $med = [];
+
+                if ($medias) {
+                    foreach ($medias as $media) {
+                        $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
+                        $mediaToAdd = new Media();
+                        $mediaToAdd->setUrl($file);
+                        $mediaToAdd->setType('IMG');
+                        $mediaToAdd->setCreatedAt(new \DateTimeImmutable('now'));
+//                 Move the file to the directory where brochures are stored
+                        try {
+                            if ($this->getParameter('prodTrickFiles')) {
+                                $media['mediaCollection']->move(
+                                    $this->getParameter('prodTrickFiles'),
+                                    $file
+                                );
+                            } else {
+                                $media['mediaCollection']->move(
+                                    $this->getParameter('trickFiles'),
+                                    $file
+                                );
+                            }
+                        } catch (FileException $e) {
+                            return $e;
+                        }
+                        $med[] = $mediaToAdd;
+                    }
+                }
+
+
+//                dd('ici');
                 $em->persist($trick);
                 $em->flush();
-                //ajout des médias lors de la création du trick
 
-//                $mediasImg = $form->get('medias')->getData();
-
-                foreach ($trick->getMedias() as $image) {
-                    dd($image);
-                    $file = md5(uniqid()) . '.' . $image->guessExtension();
-                    dd($file);
-
-                    // Move the file to the directory where brochures are stored
-                    try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $image->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $file
-                            );
-                        } else {
-                            $image->move(
-                                $this->getParameter('trickFiles'),
-                                $file
-                            );
-                        }
-                    } catch (FileException $e) {
-                        return $e;
-                    }
-
-                    $img = new Media();
-                    $img->setUrl($file);
-                    $img->setType('IMG');
-                    $img->setTrick($trick);
-                    $img->setDescription('');
-                    $img->setCreatedAt(new \DateTimeImmutable('now'));
-                    $em->persist($img);
+                foreach ($med as $media) {
+                    $media->setTrick($trick);
+                    $em->persist($media);
                     $em->flush();
                 }
                 //ajout des vidéos embed lors de la création du trick
@@ -113,23 +119,26 @@ class TrickController extends AbstractController
                 $videos = $form->get('videos')->getData();
 
                 $exploded_videos = explode(',', $videos);
-                foreach ($exploded_videos as $video_string) {
-                    $video = new Media();
 
-                    if (str_contains($video_string, "https://youtu.be")) {
-                        $video->setUrl("https://www.youtube.com/embed/" . explode("/", $video_string)[3]);
-                    } else {
-                        $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
-                        return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
+                if ($exploded_videos[0] !== "") {
+                    foreach ($exploded_videos as $video_string) {
+                        $video = new Media();
+
+                        if (str_contains($video_string, "https://youtu.be")) {
+                            $video->setUrl("https://www.youtube.com/embed/" . explode("/", $video_string)[3]);
+                        } else {
+                            $this->addFlash('error', 'Il y a eu une erreur lors de l\'ajout du contenu!');
+                            return $this->redirectToRoute('app_home', ['message' => 'Le téléchargement de fichier n\'a pas pu aboutir']);
+                        }
+
+                        $video->setType('VID');
+                        $video->setTrick($trick);
+                        $video->setDescription('');
+                        $video->setUrlVideo($video_string);
+                        $video->setCreatedAt(new \DateTimeImmutable('now'));
+                        $em->persist($video);
+                        $em->flush();
                     }
-
-                    $video->setType('VID');
-                    $video->setTrick($trick);
-                    $video->setDescription('');
-                    $video->setUrlVideo($video_string);
-                    $video->setCreatedAt(new \DateTimeImmutable('now'));
-                    $em->persist($video);
-                    $em->flush();
                 }
 
                 $this->addFlash('success', 'Le trick a bien été ajouté.');
@@ -211,40 +220,47 @@ class TrickController extends AbstractController
             $em->persist($trick);
             $em->flush();
 
-            //ajout des médias lors de la création du trick
-            $medias = $form->get('images')->getData();
+            $medias = $request->files->get('trick')['medias'] ?? null;
+                $med = [];
 
-            if ($medias) {
-                foreach ($medias as $image) {
-                    $file = md5(uniqid()) . '.' . $image->guessExtension();
-
-                    // Move the file to the directory where brochures are stored
-                    try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $image->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $file
-                            );
-                        } else {
-                            $image->move(
-                                $this->getParameter('trickFiles'),
-                                $file
-                            );
+                if ($medias) {
+                    foreach ($medias as $media) {
+                        $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
+                        $mediaToAdd = new Media();
+                        $mediaToAdd->setUrl($file);
+                        $mediaToAdd->setType('IMG');
+                        $mediaToAdd->setCreatedAt(new \DateTimeImmutable('now'));
+//                 Move the file to the directory where brochures are stored
+                        try {
+                            if ($this->getParameter('prodTrickFiles')) {
+                                $media['mediaCollection']->move(
+                                    $this->getParameter('prodTrickFiles'),
+                                    $file
+                                );
+                            } else {
+                                $media['mediaCollection']->move(
+                                    $this->getParameter('trickFiles'),
+                                    $file
+                                );
+                            }
+                        } catch (FileException $e) {
+                            return $e;
                         }
-                    } catch (FileException $e) {
-                        return $e;
+                        $med[] = $mediaToAdd;
                     }
+                }
 
-                    $img = new Media();
-                    $img->setUrl($file);
-                    $img->setType('IMG');
-                    $img->setTrick($trick);
-                    $img->setDescription('');
-                    $img->setCreatedAt(new \DateTimeImmutable('now'));
-                    $em->persist($img);
+
+//                dd('ici');
+                $em->persist($trick);
+                $em->flush();
+
+                foreach ($med as $media) {
+                    $media->setTrick($trick);
+                    $em->persist($media);
                     $em->flush();
                 }
-            }
+
             //ajout des vidéos embed lors de la création du trick
 
             $videos = $form->get('videos')->getData();
@@ -395,31 +411,31 @@ class TrickController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $image = $request->files->get('upload');
         $file = md5(uniqid()) . '.' . $image->guessExtension();
-                    // Move the file to the directory where brochures are stored
-                    try {
-                        if ($this->getParameter('prodTrickFiles')) {
-                            $image->move(
-                                $this->getParameter('prodTrickFiles'),
-                                $file
-                            );
-                        } else {
-                            $image->move(
-                                $this->getParameter('trickFiles'),
-                                $file
-                            );
-                        }
-                    } catch (FileException $e) {
-                        return $e;
-                    }
+        // Move the file to the directory where brochures are stored
+        try {
+            if ($this->getParameter('prodTrickFiles')) {
+                $image->move(
+                    $this->getParameter('prodTrickFiles'),
+                    $file
+                );
+            } else {
+                $image->move(
+                    $this->getParameter('trickFiles'),
+                    $file
+                );
+            }
+        } catch (FileException $e) {
+            return $e;
+        }
 
-                    $img = new Media();
-                    $img->setUrl($file);
-                    $img->setType('IMG');
-                    $img->setDescription('');
-                    $img->setCreatedAt(new \DateTimeImmutable('now'));
-                    $img->setTrick(1);
-                    $em->persist($img);
-                    $em->flush();
+        $img = new Media();
+        $img->setUrl($file);
+        $img->setType('IMG');
+        $img->setDescription('');
+        $img->setCreatedAt(new \DateTimeImmutable('now'));
+        $img->setTrick(1);
+        $em->persist($img);
+        $em->flush();
 
         return new JsonResponse(200, $img->getUrl());
 
