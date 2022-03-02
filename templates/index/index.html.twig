@@ -14,7 +14,8 @@
                 <div class="row" id="tricksPage">
                 </div>
                 <button id="loadBtn" class="btn btn-dark" style="border-radius: 5px; margin-bottom: 200px;
-">Charger plus de tricks</button>
+">Charger plus de tricks
+                </button>
                 {# <div class="row"> #}
                 {# {% for trick in tricks %} #}
                 {# <div class="col-sm-12 col-md-9 col-xl-3"> #}
@@ -53,10 +54,11 @@
 
         var offset = 0;
         var limit = 4;
+        let isLoading = false;
 
         function getTricks() {
-            $("#loadBtn").val('Loading...');
-
+            $("#loadBtn").html('Chargement...');
+            isLoading = true;
             $.ajax({
                 url: '/getTricks',
                 type: 'POST',
@@ -83,16 +85,25 @@
                             <hr>
                         </div>`;
 
-                console.log(data);
                 offset = data.limit_offset.min
                 limit = data.limit_offset.max
-                $.each(data.result, function () {
+
+                $.each(data.result.tricks, function () {
                     var new_template = template.replace("--titleTrick--", $(this)[1])
                     new_template = new_template.replaceAll("--idTrick--", $(this)[0])
                     new_template = new_template.replace("--imgBg--", $(this)[2])
                     new_template = new_template.replace("--dateTrick--", $(this)[3])
                     $('#tricksPage').append(new_template)
                 });
+
+                isLoading = false;
+
+                console.log(data.result.current, data.result.totalTricks)
+                if (data.result.current >= data.result.totalTricks) {
+                    $("#loadBtn").hide();
+                }
+
+                $("#loadBtn").html('Charger plus de tricks');
 
             }).fail(function () {
 

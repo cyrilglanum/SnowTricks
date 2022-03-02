@@ -8,48 +8,34 @@
         {{ message }}
     {% endif %}
 
-<div class="container">
-    <h1>Détail du trick {{ trick.name }}</h1>{% if user.email is defined %}
-    {% if user.email == "cyril@glanum.com" %}
-        <a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"><i class="fas fa-edit"></i></a>
-        <a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
-    {% endif %}
-    {% endif %}
-
-    <div class="col-sm-12">
-        <br>
-        <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
-
-        <!-- Page Content -->
-        <div class="container">
-            <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Galerie</h1>
-            {% if user.email is defined %}
-                <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary mb-3 "> Ajouter un
-                    média</a><br>
+    <div class="container">
+        <h1>Détail du trick {{ trick.name }}</h1>
+        {% if user.email is defined %}
+            {% if user.email == "cyril@glanum.com" %}
+                <a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"><i class="fas fa-edit"></i></a>
+                <a href="{{ url('deleteTrick',{'id' : trick.id}) }}"><i class="fas fa-trash"></i></a>
             {% endif %}
-            <hr class="mt-2 mb-5">
-            <div class="row text-center text-lg-start">
-                {% for media in medias %}
-                {% if media.type == 'IMG' %}
-                <!-- Button trigger modal -->
+        {% endif %}
 
-                <div class="col-lg-3 col-md-4 col-6" data-toggle="tooltip" data-placement="right"
-                     title="{{ media.description }}">
-                    {% if user != null %}
-                    {% if user.email == "cyril@glanum.com" %}
-                        <a href="{{ url('deleteMedia', {'trick_id':trick.id,'media_id': media.id}) }}"
-                           onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result">
-                            <i class="fas fa-trash"></i></a>
-                    {% endif %}
-                    {% endif %}<a class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail"
-                             src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" alt="" data-bs-toggle="modal"
-                             data-bs-target="#exampleModal{{ media.id }}">
-                    </a>
+        <div class="col-sm-12">
+            <br>
+            <img src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" width="100%">
 
-                    {% else %}
-                    <div class="col-lg-4 col-md-6 col-12" data-toggle="tooltip" data-placement="right"
-                         title="{{ media.description }}" style="margin-right: 120px">
+            <!-- Page Content -->
+            <div class="container">
+                <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Galerie</h1>
+                {% if user.email is defined %}
+                    <a href="{{ url('addMedia',{'id' : trick.id}) }}" class="btn btn-primary mb-3 "> Ajouter un
+                        média</a><br>
+                {% endif %}
+                <hr class="mt-2 mb-5">
+                <div class="row text-center text-lg-start">
+                    {% for media in medias %}
+                    {% if media.type == 'IMG' %}
+                    <!-- Button trigger modal -->
+
+                    <div class="col-lg-3 col-md-4 col-6" data-toggle="tooltip" data-placement="right"
+                         title="{{ media.description }}">
                         {% if user != null %}
                         {% if user.email == "cyril@glanum.com" %}
                             <a href="{{ url('deleteMedia', {'trick_id':trick.id,'media_id': media.id}) }}"
@@ -57,91 +43,167 @@
                                 <i class="fas fa-trash"></i></a>
                         {% endif %}
                         {% endif %}<a class="d-block mb-4 h-100">
-                            <embed type="video/webm"
-                                   src="{{ media.url }}"
-                                   width="380"
-                                   height="280">
-                            <a href="{{ media.url }}"></a>
+                            <img class="img-fluid img-thumbnail"
+                                 src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" alt="" data-bs-toggle="modal"
+                                 data-bs-target="#exampleModal{{ media.id }}">
+                        </a>
+
+                        {% else %}
+                        <div class="col-lg-4 col-md-6 col-12" data-toggle="tooltip" data-placement="right"
+                             title="{{ media.description }}" style="margin-right: 120px">
+                            {% if user != null %}
+                            {% if user.email == "cyril@glanum.com" %}
+                                <a href="{{ url('deleteMedia', {'trick_id':trick.id,'media_id': media.id}) }}"
+                                   onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result">
+                                    <i class="fas fa-trash"></i></a>
                             {% endif %}
+                            {% endif %}<a class="d-block mb-4 h-100">
+                                <embed type="video/webm"
+                                       src="{{ media.url }}"
+                                       width="380"
+                                       height="280">
+                                <a href="{{ media.url }}"></a>
+                                {% endif %}
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
 
-            <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Description</h1>
-            <hr class="mt-2 mb-5">
-            <span>{{ trick.description }}</span><br>
-            <span><strong>Groupe</strong> : {{ trick.groupe }}</span>
-            <br>
-            <em class="mt-3"> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
-            <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Commentaires</h1>
-            {% if user.email is defined %}
-                <a href="{{ url('commentTrick',{'id' : trick.id}) }}" class="btn btn-primary mb-3 "> Commenter</a><br>
-            {% endif %}
-            <hr class="mt-2 mb-3">
-            {% set count = 0 %}
-            {% for comment in comments|reverse %}
-                <div {% if(count < 4) %}
-                    class="loadComments"
-                {% else %}
-                    class="loadComments d-none"
+                <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Description</h1>
+                <hr class="mt-2 mb-5">
+                <span>{{ trick.description }}</span><br>
+                <span><strong>Groupe</strong> : {{ trick.groupe }}</span>
+                <br>
+                <em class="mt-3"> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br>
+                <h1 class="fw-light text-center text-lg-start mt-4 mb-0">Commentaires</h1>
+                {% if user.email is defined %}
+                    <a href="{{ url('commentTrick',{'id' : trick.id}) }}" class="btn btn-primary mb-3 "> Commenter</a>
+                    <br>
                 {% endif %}
-                >
-                    <span>{{ comment.message }}</span><br>
-                    <em>{{ comment.author }}</em>
-                    <br>
-                    <em>Ecrit le {{ comment.getCreatedAt()|date('d/m/Y H:i:s') }} par {{ comment.author }}</em>
-                    <br>
-                    <hr>
-                </div>
-                {% set count = count + 1 %}
+                <hr class="mt-2 mb-3">
+                {#            {% set count = 0 %} #}
+                {#            {% for comment in comments|reverse %} #}
+                {#                <div {% if(count < 4) %} #}
+                {#                    class="loadComments" #}
+                {#                {% else %} #}
+                {#                    class="loadComments d-none" #}
+                {#                {% endif %} #}
+                {#                > #}
+                {#                    <span>{{ comment.message }}</span><br> #}
+                {#                    <em>{{ comment.author }}</em> #}
+                {#                    <br> #}
+                {#                    <em>Ecrit le {{ comment.getCreatedAt()|date('d/m/Y H:i:s') }} par {{ comment.author }}</em> #}
+                {#                    <br> #}
+                {#                    <hr> #}
+                {#                </div> #}
+                {#                {% set count = count + 1 %} #}
 
-            {% endfor %}
+                {#            {% endfor %} #}
 
-            {% if count != 0 %}
+                <div id="tricksComments"></div>
+
+                {#            {% if count != 0 %} #}
                 <a id="loadMore" style="padding-bottom: 200px; font-size: 2rem!important;"><i class="fas fa-plus"></i>
                     Charger plus (total :{{ comments|length }} commentaires)</a>
-            {% endif %}
+                {#            {% endif %} #}
 
-        </div>
-    </div>
-
-    {% for media in medias %}
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal{{ media.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{{ media.description }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <img class="img-fluid img-thumbnail"
-                             src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" alt="">
-                    </div>
-
-                </div>
             </div>
         </div>
-    {% endfor %}
+
+        {% for media in medias %}
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal{{ media.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ media.description }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img class="img-fluid img-thumbnail"
+                                 src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" alt="">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+  <style>
+      #loadMore{
+          position: relative;
+          display: inline-block;
+      }
+
+      #loadMore.isLoading::before{
+          position: absolute;
+          top:0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          cursor: progress;
+          height: 100px;
+      }
+
+  </style>
+
     <script>
-        var startCount = 4;
-        var endCount = 8;
-        const counter = 4;
-        var elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
 
-        $('#loadMore').click(function () {
-            console.log(elements);
-            $(elements).addClass('block');
-            $(elements).removeClass('d-none');
-            startCount = endCount;
-            endCount = endCount + counter;
-            elements = Array.prototype.slice.call($('.loadComments'), startCount, endCount);
-            // if(startCount>elements.length){
-            //     alert('tous les messages sont affichés')
-            // }
-        })
+        let offset = 0;
+        let limit = 4;
+        let trickId = {{ trick.id }};
 
+        let isLoading = false;
+
+        function getComments() {
+            isLoading = true;
+            $("#loadMore").html('Chargement...');
+            $("#loadMore").addClass("isLoading");
+
+
+            $.ajax({
+                url: '/getComments',
+                type: 'POST',
+                data: {"min": offset, "max": limit, "trickId": trickId}
+            }).done(function (data) {
+                let template = ``;
+
+                console.log(data);
+                offset = data.limit_offset.min
+                limit = data.limit_offset.max
+                $.each(data.result.commentaires, function (index, element) {
+                    template += `<span>${element[0]}</span><br>
+                    <em>Ecrit le ${element[1]} par ${element[2]}</em>
+                    <br>
+                    <hr>`;
+                });
+
+                $('#tricksComments').append(template)
+
+                isLoading = false;
+                $("#loadMore").removeClass("isLoading");
+                if(data.result.current >= data.result.total){
+                    $("#loadMore").hide();
+                }
+                $("#loadMore").html('<i class="fas fa-plus"></i>Charger plus (total :{{ comments|length }} commentaires)')
+
+            }).fail(function () {
+
+                console.log('une erreur est survenue. ')
+
+            });
+        }
+
+        $(document).ready(function () {
+            getComments();
+
+            $('#loadMore').on('click', function () {
+                getComments();
+
+            });
+        });
     </script>
-    {% endblock %}
+
+{% endblock %}

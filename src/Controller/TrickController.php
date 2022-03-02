@@ -324,18 +324,55 @@ class TrickController extends AbstractController
         $min = $request->request->get('min');
         $max = $request->request->get('max');
 
+        $allTricks = $this->getDoctrine()
+            ->getRepository(Tricks::class)->findAll();
+
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
             ->findBy(array(), null, 4, $min);
 
         $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
         $output['result'] = [];
+        $output['result']['totalTricks'] = count($allTricks);
+        $output['result']['current'] = $max;
 
         foreach ($tricks as $trick) {
 
-            $output['result'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')));
+            $output['result']['tricks'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')));
         }
-        return new JsonResponse($output,);
+
+        return new JsonResponse($output);
+
+    }
+
+    /**
+     * @Route("/getComments", name="getCommentsAjax", methods={"POST"})
+     */
+    public function getComments(Request $request)
+    {
+        $min = $request->request->get('min');
+        $max = $request->request->get('max');
+        $trickId = $request->request->get('trickId');
+
+        $allComments = $this->getDoctrine()
+            ->getRepository(Comments::class)
+            ->findBy(['trick_id' => $trickId]);
+
+        $comments = $this->getDoctrine()
+            ->getRepository(Comments::class)
+            ->findBy(['trick_id' => $trickId],null,4,$min);
+
+        $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
+        $output['result'] = [];
+
+        foreach ($comments as $comment) {
+            $output['result']['commentaires'][] = array($comment->getMessage(), $comment->getCreatedAt()->format('d-m-Y à H:i:s'), $comment->getAuthor());
+        }
+
+        $output['result']['total'] = count($allComments);
+        $output['result']['current'] = $max;
+
+        return new JsonResponse($output);
 
     }
 
