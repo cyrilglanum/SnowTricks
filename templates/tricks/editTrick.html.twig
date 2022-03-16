@@ -25,23 +25,23 @@
             <span id="span"></span>
 
         </div>
-        {#        <h2>Cochez les médias que vous voulez supprimer</h2> #}
-        {#            {% for media in trick.medias %} #}
-        {#        <br> #}
-        {#                <input type="checkbox" name="media_to_delete[]" value="{{ media.id }}"> #}
-        {#                {% if(media.type == 'IMG') %} #}
-        {#                <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="width: 300px;margin-bottom: 15px"> #}
-        {#                {% else %} #}
+                <h2>Cochez les médias que vous voulez supprimer</h2>
+                    {% for media in trick.medias %}
+                <br>
+                        <input type="checkbox" name="media_to_delete[]" value="{{ media.id }}">
+                        {% if(media.type == 'IMG') %}
+                        <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="width: 300px;margin-bottom: 15px">
+                        {% else %}
 
-        {#                            <a class="d-block mb-4 h-100" style="margin-left: 50px"> #}
-        {#                            <embed type="video/webm" #}
-        {#                                   src="{{ media.url }}" #}
-        {#                                   width="380" #}
-        {#                                   height="280"> #}
-        {#                            <a href="{{ media.url }}"></a> #}
-        {#                {% endif %} #}
-        {#            {% endfor %} #}
-        {#        {{ form_row(form.images) }} #}
+                                    <a class="d-block mb-4 h-100" style="margin-left: 50px">
+                                    <embed type="video/webm"
+                                           src="{{ media.url }}"
+                                           width="380"
+                                           height="280">
+                                    <a href="{{ media.url }}"></a>
+                        {% endif %}
+                    {% endfor %}
+{#                {{ form_row(form.images) }}#}
         {{ form_row(form.videos) }}
         <button type="submit" class="mt-3 btn btn-primary">Modifier mon trick</button>
         {{ form_end(form) }}
