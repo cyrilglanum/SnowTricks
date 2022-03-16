@@ -16,33 +16,6 @@
                 <button id="loadBtn" class="btn btn-dark" style="border-radius: 5px; margin-bottom: 200px;
 ">Charger plus de tricks
                 </button>
-                {# <div class="row"> #}
-                {# {% for trick in tricks %} #}
-                {# <div class="col-sm-12 col-md-9 col-xl-3"> #}
-                {# <div style="height: 350px"> #}
-                {# <h3>{{ trick.name }}</h3> #}
-                {# <br> #}
-                {# <a href="{{ url('trick', {'id' : trick.id }) }}"><img #}
-                {# src="{{ asset('uploads/tricksFile') }}/{{ trick.imgBackground }}" #}
-                {# width="100%" style="max-height: 240px"> #}
-                {# </a> #}
-                {# </div> #}
-                {# <em> crée le {{ trick.dateCreation|date('Y-m-d à H:i:s') }}</em><br> #}
-                {# #}{# get current user #}
-                {# {% if user.email is defined %} #}
-                {# {% if user.email == "cyril@glanum.com" %} #}
-                {# <a href="{{ url('editTrick',{'trick_id' : trick.id}) }}"><i class="fas fa-edit"></i></a> #}
-                {# <a href="{{ url('deleteTrick',{'id' : trick.id}) }}" #}
-                {# onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i #}
-                {# class="fas fa-trash"></i></a> #}
-                {# {% endif %} #}
-                {# {% endif %} #}
-                {# <hr> #}
-                {# </div> #}
-                {# {% endfor %} #}
-
-
-                {# </div> #}
             </div>
         </div>
     </div>
@@ -56,60 +29,64 @@
         var limit = 4;
         let isLoading = false;
 
+        function wait() {}
+
         function getTricks() {
-            $("#loadBtn").html('Chargement...');
             isLoading = true;
-            $.ajax({
-                url: '/getTricks',
-                type: 'POST',
-                data: {"min": offset, "max": limit}
-            }).done(function (data) {
 
-                var template = `<div class="col-sm-12 col-md-9 col-xl-3">
-                            <div style="height: 350px">
-                                <h3>--titleTrick--</h3>
-                                <br>
-                                                    <a href="{{ url('trick', {'id' : '--idTrick--' }) }}"><img
-                                            src="{{ asset('uploads/tricksFile') }}/{{ "--imgBg--" }}"
-                                            width="100%" style="max-height: 240px">
-                                </a></div>
-                            <em> créée le --dateTrick--</em><br>
-                            {% if user.email is defined %}
-                                {% if user.email == "cyril@glanum.com" %}
-                                    <a href="{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}"><i class="fas fa-edit"></i></a>
-                                    <a href="{{ url('deleteTrick',{'id' : '--idTrick--'}) }}"
-                                       onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
-                                                class="fas fa-trash"></i></a>
+            {
+                $.ajax({
+                    url: '/getTricks',
+                    type: 'POST',
+                    data: {"min": offset, "max": limit}
+                }).done(function (data) {
+
+                    var template = `<div class="col-sm-12 col-md-9 col-xl-3">
+                                <div style="height: 350px">
+                                    <h3>--titleTrick--</h3>
+                                    <br>
+                                                        <a href="{{ url('trick', {'id' : '--idTrick--' }) }}"><img
+                                                src="{{ asset('uploads/tricksFile') }}/{{ "--imgBg--" }}"
+                                                width="100%" style="max-height: 240px">
+                                    </a></div>
+                                <em> créée le --dateTrick--</em><br>
+                                {% if user.email is defined %}
+                                    {% if user.email == "cyril@glanum.com" %}
+                                        <a href="{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ url('deleteTrick',{'id' : '--idTrick--'}) }}"
+                                           onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
+                                                    class="fas fa-trash"></i></a>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            <hr>
-                        </div>`;
+                                <hr>
+                            </div>`;
 
-                offset = data.limit_offset.min
-                limit = data.limit_offset.max
+                    offset = data.limit_offset.min
+                    limit = data.limit_offset.max
 
-                $.each(data.result.tricks, function () {
-                    var new_template = template.replace("--titleTrick--", $(this)[1])
-                    new_template = new_template.replaceAll("--idTrick--", $(this)[0])
-                    new_template = new_template.replace("--imgBg--", $(this)[2])
-                    new_template = new_template.replace("--dateTrick--", $(this)[3])
-                    $('#tricksPage').append(new_template)
+                    $.each(data.result.tricks, function () {
+                        var new_template = template.replace("--titleTrick--", $(this)[1])
+                        new_template = new_template.replaceAll("--idTrick--", $(this)[0])
+                        new_template = new_template.replace("--imgBg--", $(this)[2])
+                        new_template = new_template.replace("--dateTrick--", $(this)[3])
+                        $('#tricksPage').append(new_template)
+                    });
+
+                    isLoading = false;
+
+                    // console.log(data.result.current, data.result.totalTricks)
+                    if (data.result.current >= data.result.totalTricks) {
+                        $("#loadBtn").hide();
+                    }
+
+                    $("#loadBtn").html('Charger plus de tricks');
+
+                }).fail(function () {
+
+                    //some code going here if error
+
                 });
-
-                isLoading = false;
-
-                console.log(data.result.current, data.result.totalTricks)
-                if (data.result.current >= data.result.totalTricks) {
-                    $("#loadBtn").hide();
-                }
-
-                $("#loadBtn").html('Charger plus de tricks');
-
-            }).fail(function () {
-
-                //some code going here if error
-
-            });
+            }
         }
 
         $(document).ready(function () {
@@ -117,7 +94,8 @@
             getTricks();
 
             $(document).on('click', '#loadBtn', function () {
-                getTricks();
+                $("#loadBtn").html('Chargement...');
+                setTimeout(getTricks,400);
             });
         })
         ;
