@@ -159,9 +159,8 @@
 
         function getComments() {
             isLoading = true;
-            $("#loadMore").html('Chargement...');
-            $("#loadMore").addClass("isLoading");
 
+            $("#loadMore").addClass("isLoading");
 
             $.ajax({
                 url: '/getComments',
@@ -200,8 +199,8 @@
             getComments();
 
             $('#loadMore').on('click', function () {
-                getComments();
-
+                $("#loadMore").html('Chargement...');
+                setTimeout(getComments,400);
             });
         });
     </script>

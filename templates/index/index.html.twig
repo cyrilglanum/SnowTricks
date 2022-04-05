@@ -20,16 +20,19 @@
         </div>
     </div>
 
-
-
-
-    <script>
-
+    <script type="text/javascript">
+        var url_trick = '{{ url('trick', {'id' : '--idTrick--' }) }}';
+        var url_edit_trick = '{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}';
+        var url_delete_trick = '{{ url('deleteTrick',{'id' : '--idTrick--'}) }}';
+        var asset_url = '{{ asset('uploads/tricksFile') }}/--imgBg--';
         var offset = 0;
         var limit = 4;
         let isLoading = false;
+        var user = {{ user }};
 
-        function wait() {}
+
+        function wait() {
+        }
 
         function getTricks() {
             isLoading = true;
@@ -38,37 +41,41 @@
                 $.ajax({
                     url: '/getTricks',
                     type: 'POST',
-                    data: {"min": offset, "max": limit}
+                    data: {"min": offset, "max": limit, "user": user}
                 }).done(function (data) {
-
-                    var template = `<div class="col-sm-12 col-md-9 col-xl-3">
-                                <div style="height: 350px">
-                                    <h3>--titleTrick--</h3>
-                                    <br>
-                                                        <a href="{{ url('trick', {'id' : '--idTrick--' }) }}"><img
-                                                src="{{ asset('uploads/tricksFile') }}/{{ "--imgBg--" }}"
-                                                width="100%" style="max-height: 240px">
-                                    </a></div>
-                                <em> créée le --dateTrick--</em><br>
-                                {% if user.email is defined %}
-                                    {% if user.email == "cyril@glanum.com" %}
-                                        <a href="{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}"><i class="fas fa-edit"></i></a>
-                                        <a href="{{ url('deleteTrick',{'id' : '--idTrick--'}) }}"
-                                           onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
-                                                    class="fas fa-trash"></i></a>
-                                    {% endif %}
-                                {% endif %}
-                                <hr>
-                            </div>`;
-
                     offset = data.limit_offset.min
                     limit = data.limit_offset.max
 
-                    $.each(data.result.tricks, function () {
-                        var new_template = template.replace("--titleTrick--", $(this)[1])
-                        new_template = new_template.replaceAll("--idTrick--", $(this)[0])
-                        new_template = new_template.replace("--imgBg--", $(this)[2])
-                        new_template = new_template.replace("--dateTrick--", $(this)[3])
+                    $.each(data.result.tricks, function (trick) {
+
+                        var new_template = `<div class="col-sm-12 col-md-9 col-xl-3">
+                                <div style="height: 350px">
+                                    <h3>` + $(this)[1] + `</h3>
+                                    <br>
+                                                        <a href="` + url_trick.replaceAll("--idTrick--", $(this)[0]) + `"><img
+                                                src="` + asset_url.replace("--imgBg--", $(this)[2]) + `"
+                                                width="100%" style="max-height: 240px">
+                                    </a></div>
+                                <em> créée le ` + $(this)[3] + `</em><br>
+                                {% if user.email is defined %}
+                                    {% if user.roles == "admin" %}
+                                        <a href="` + url_edit_trick.replaceAll("--idTrick--", $(this)[0]) + `"><i class="fas fa-edit"></i></a>
+                                        <a href="` + url_delete_trick.replaceAll("--idTrick--", $(this)[0]) + `"
+                                           onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
+                                                    class="fas fa-trash"></i></a>
+                                    {% endif %}
+                                {% endif %}`;
+
+                        if ($(this)[4] == parseInt(user)) {
+                            new_template += ` <a href="` + url_edit_trick.replaceAll("--idTrick--", $(this)[0]) + `"><i class="fas fa-edit"></i></a>
+                                        <a href="` + url_delete_trick.replaceAll("--idTrick--", $(this)[0]) + `"
+                                           onclick=" var result = confirm('Êtes vous sur de vouloir supprimer le média?');return result"><i
+                                                    class="fas fa-trash"></i></a>`;
+                        }
+
+                        new_template += ` <hr>
+                            </div>`;
+
                         $('#tricksPage').append(new_template)
                     });
 
@@ -95,7 +102,7 @@
 
             $(document).on('click', '#loadBtn', function () {
                 $("#loadBtn").html('Chargement...');
-                setTimeout(getTricks,400);
+                setTimeout(getTricks, 400);
             });
         })
         ;

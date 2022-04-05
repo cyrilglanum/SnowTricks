@@ -77,8 +77,11 @@ class TrickController extends AbstractController
                 $medias = $request->files->get('trick')['medias'] ?? null;
                 $med = [];
 
-                if ($medias) {
+                if ($medias !== null) {
                     foreach ($medias as $media) {
+                        if($media['mediaCollection'] === null){
+                            continue;
+                        }
                         $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
                         $mediaToAdd = new Media();
                         $mediaToAdd->setUrl($file);
@@ -104,8 +107,6 @@ class TrickController extends AbstractController
                     }
                 }
 
-
-//                dd('ici');
                 $em->persist($trick);
                 $em->flush();
 
@@ -223,8 +224,11 @@ class TrickController extends AbstractController
             $medias = $request->files->get('trick')['medias'] ?? null;
                 $med = [];
 
-                if ($medias) {
+                if ($medias !== null) {
                     foreach ($medias as $media) {
+                        if($media['mediaCollection'] === null){
+                            continue;
+                        }
                         $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
                         $mediaToAdd = new Media();
                         $mediaToAdd->setUrl($file);
@@ -250,8 +254,6 @@ class TrickController extends AbstractController
                     }
                 }
 
-
-//                dd('ici');
                 $em->persist($trick);
                 $em->flush();
 
@@ -287,12 +289,15 @@ class TrickController extends AbstractController
                 }
             }
 
-            $this->addFlash('success', 'Le trick a bien été ajouté.');
+            $this->addFlash('success', 'Le trick a bien été modifié.');
             return $this->redirectToRoute('app_home');
         }
 
+        $user = $this->getUser();
+
         return $this->render('tricks/editTrick.html.twig', array(
             'form' => $form->createView(),
+            'user' => $user,
             'trick' => $trick,
         ));
     }
@@ -323,22 +328,22 @@ class TrickController extends AbstractController
     {
         $min = $request->request->get('min');
         $max = $request->request->get('max');
+        $user = $request->request->get('user');
 
         $allTricks = $this->getDoctrine()
             ->getRepository(Tricks::class)->findAll();
 
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
-            ->findBy(array(), null, 4, $min);
+            ->findBy(array(), null, 8, $min);
 
-        $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
+        $output['limit_offset'] = ['min' => $min + 8, 'max' => $max + 8];
         $output['result'] = [];
         $output['result']['totalTricks'] = count($allTricks);
         $output['result']['current'] = $max;
 
         foreach ($tricks as $trick) {
-
-            $output['result']['tricks'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')));
+            $output['result']['tricks'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')), $trick->getUser()->getId(), $user);
         }
 
         return new JsonResponse($output);
