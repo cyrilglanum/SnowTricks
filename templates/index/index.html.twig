@@ -21,15 +21,22 @@
     </div>
 
     <script type="text/javascript">
-        var url_trick = '{{ url('trick', {'id' : '--idTrick--' }) }}';
-        var url_edit_trick = '{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}';
-        var url_delete_trick = '{{ url('deleteTrick',{'id' : '--idTrick--'}) }}';
-        var asset_url = '{{ asset('uploads/tricksFile') }}/--imgBg--';
-        var offset = 0;
-        var limit = 4;
+        let url_trick = '{{ url('trick', {'id' : '--idTrick--' }) }}';
+        let url_edit_trick = '{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}';
+        let url_delete_trick = '{{ url('deleteTrick',{'id' : '--idTrick--'}) }}';
+        let asset_url = '{{ asset('uploads/tricksFile') }}/--imgBg--';
+        let offset = 0;
+        let limit = 4;
         let isLoading = false;
-        var user = {{ user }};
-
+        let user = 'user.{{ user }}'
+        {#let user = {{ user }} ?? {{ user }} : null;#}
+        console.log(user)
+        if(user === 'user.'){
+        }else{
+            //initialisation d'un utilisateur non vide.
+            user = {{ user }}+'.';
+            user = user.replace('.','');
+        }
 
         function wait() {
         }
