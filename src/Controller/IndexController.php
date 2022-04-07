@@ -23,10 +23,11 @@ class IndexController extends AbstractController
     public function index(): Response
     {
         $tricks = $this->getDoctrine()->getRepository(Tricks::class)->findAll();
+        $user = $this->getUser();
 
         return $this->render('index/index.html.twig', [
             'tricks' => $tricks ?? null,
-            'user' => $this->getUser() ?? null,
+            'user' => $user ?? null,
         ]);
     }
 

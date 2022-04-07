@@ -125,4 +125,11 @@ class Comments
         return $this;
     }
 
+//    private $image;
+//
+//    public function getImage()
+//    {
+//        return $this->image;
+//    }
+
 }

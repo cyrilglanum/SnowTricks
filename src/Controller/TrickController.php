@@ -6,6 +6,7 @@ namespace App\Controller;
 use App\Entity\Comments;
 use App\Entity\Media;
 use App\Entity\Tricks;
+use App\Entity\Users;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\MediaRepository;
@@ -70,7 +71,7 @@ class TrickController extends AbstractController
                 }
                 $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
                 $trick->setDateCreation(new \DateTime('now'));
-
+                $trick->setUser($user);
 
                 $em = $this->getDoctrine()->getManager();
 
@@ -79,7 +80,7 @@ class TrickController extends AbstractController
 
                 if ($medias !== null) {
                     foreach ($medias as $media) {
-                        if($media['mediaCollection'] === null){
+                        if ($media['mediaCollection'] === null) {
                             continue;
                         }
                         $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
@@ -162,9 +163,9 @@ class TrickController extends AbstractController
      */
     public function updateForm(Request $request, $trick_id, SluggerInterface $slugger)
     {
-
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($trick_id);
         $form = $this->createForm(TrickType::class, $trick);
+        $user = $this->getUser();
 
         if (!$trick) {
             return $this->render('404.html.twig');
@@ -216,52 +217,54 @@ class TrickController extends AbstractController
             }
             $trick->setDescription(htmlspecialchars($form->get('description')->getData()));
             $trick->setDateCreation(new \DateTime('now'));
+            $trick->setUser($user);
+
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
 
             $medias = $request->files->get('trick')['medias'] ?? null;
-                $med = [];
+            $med = [];
 
-                if ($medias !== null) {
-                    foreach ($medias as $media) {
-                        if($media['mediaCollection'] === null){
-                            continue;
-                        }
-                        $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
-                        $mediaToAdd = new Media();
-                        $mediaToAdd->setUrl($file);
-                        $mediaToAdd->setType('IMG');
-                        $mediaToAdd->setCreatedAt(new \DateTimeImmutable('now'));
-//                 Move the file to the directory where brochures are stored
-                        try {
-                            if ($this->getParameter('prodTrickFiles')) {
-                                $media['mediaCollection']->move(
-                                    $this->getParameter('prodTrickFiles'),
-                                    $file
-                                );
-                            } else {
-                                $media['mediaCollection']->move(
-                                    $this->getParameter('trickFiles'),
-                                    $file
-                                );
-                            }
-                        } catch (FileException $e) {
-                            return $e;
-                        }
-                        $med[] = $mediaToAdd;
+            if ($medias !== null) {
+                foreach ($medias as $media) {
+                    if ($media['mediaCollection'] === null) {
+                        continue;
                     }
+                    $file = md5(uniqid()) . '.' . $media['mediaCollection']->guessExtension();
+                    $mediaToAdd = new Media();
+                    $mediaToAdd->setUrl($file);
+                    $mediaToAdd->setType('IMG');
+                    $mediaToAdd->setCreatedAt(new \DateTimeImmutable('now'));
+//                 Move the file to the directory where brochures are stored
+                    try {
+                        if ($this->getParameter('prodTrickFiles')) {
+                            $media['mediaCollection']->move(
+                                $this->getParameter('prodTrickFiles'),
+                                $file
+                            );
+                        } else {
+                            $media['mediaCollection']->move(
+                                $this->getParameter('trickFiles'),
+                                $file
+                            );
+                        }
+                    } catch (FileException $e) {
+                        return $e;
+                    }
+                    $med[] = $mediaToAdd;
                 }
+            }
 
-                $em->persist($trick);
+            $em->persist($trick);
+            $em->flush();
+
+            foreach ($med as $media) {
+                $media->setTrick($trick);
+                $em->persist($media);
                 $em->flush();
-
-                foreach ($med as $media) {
-                    $media->setTrick($trick);
-                    $em->persist($media);
-                    $em->flush();
-                }
+            }
 
             //ajout des vidéos embed lors de la création du trick
 
@@ -343,11 +346,10 @@ class TrickController extends AbstractController
         $output['result']['current'] = $max;
 
         foreach ($tricks as $trick) {
-            $output['result']['tricks'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')), $trick->getUser()->getId(), $user);
+            $output['result']['tricks'][] = array($trick->getId(), $trick->getName(), $trick->getImgBackground(), $trick->getDateCreation()->format(('d-m-Y à H:i:s')), $trick->getUser()->getId() ?? 1, $user);
         }
 
         return new JsonResponse($output);
-
     }
 
     /**
@@ -358,6 +360,7 @@ class TrickController extends AbstractController
         $min = $request->request->get('min');
         $max = $request->request->get('max');
         $trickId = $request->request->get('trickId');
+        $user = $request->request->get('user');
 
         $allComments = $this->getDoctrine()
             ->getRepository(Comments::class)
@@ -365,15 +368,29 @@ class TrickController extends AbstractController
 
         $comments = $this->getDoctrine()
             ->getRepository(Comments::class)
-            ->findBy(['trick_id' => $trickId],null,4,$min);
+            ->findBy(['trick_id' => $trickId], null, 4, $min);
 
         $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
         $output['result'] = [];
+    /*$userId = $this->getDoctrine()
+                ->getManager()
+            ->getRepository(Users::class)
 
+            ->findAll();*/
+    //dd($userId);
         foreach ($comments as $comment) {
-            $output['result']['commentaires'][] = array($comment->getMessage(), $comment->getCreatedAt()->format('d-m-Y à H:i:s'), $comment->getAuthor());
-        }
 
+
+
+
+         /*  $userPictUrl = $this->getDoctrine()->getManager()->getRepository(Users::class)->find($userId);*/
+
+
+
+
+            $output['result']['commentaires'][] = array($comment->getMessage(), $comment->getCreatedAt()->format('d-m-Y à H:i:s'), $comment->getAuthor(), $comment->getUser()->getId() ?? 1, $user);
+        }
+dd($comment->getUser()->getImage());
         $output['result']['total'] = count($allComments);
         $output['result']['current'] = $max;
 
@@ -426,7 +443,6 @@ class TrickController extends AbstractController
             $comment->setUser($this->getUser());
             $comment->setAuthor($this->getUser()->getEmail());
             $comment->setCreatedAt(new \DateTimeImmutable('now'));
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();

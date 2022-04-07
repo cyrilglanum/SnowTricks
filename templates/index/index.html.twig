@@ -29,8 +29,6 @@
         let limit = 4;
         let isLoading = false;
         let user = 'user.{{ user }}'
-        {#let user = {{ user }} ?? {{ user }} : null;#}
-        console.log(user)
         if(user === 'user.'){
         }else{
             //initialisation d'un utilisateur non vide.
@@ -88,7 +86,6 @@
 
                     isLoading = false;
 
-                    // console.log(data.result.current, data.result.totalTricks)
                     if (data.result.current >= data.result.totalTricks) {
                         $("#loadBtn").hide();
                     }
@@ -97,7 +94,6 @@
 
                 }).fail(function () {
 
-                    //some code going here if error
 
                 });
             }
