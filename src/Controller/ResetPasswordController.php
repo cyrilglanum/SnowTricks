@@ -170,22 +170,6 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
 
-//        dd($this->resetPasswordHelper->generateResetToken($user));
-//        try {
-//            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-//        } catch (ResetPasswordExceptionInterface $e) {
-//            // If you want to tell the user why a reset email was not sent, uncomment
-//            // the lines below and change the redirect to 'app_forgot_password_request'.
-//            // Caution: This may reveal if a user is registered or not.
-//            //
-//             $this->addFlash('reset_password_error', sprintf(
-//                 'There was a problem handling your password reset request - %s',
-//                 $e->getReason()
-//             ));
-//
-//            return $this->redirectToRoute('app_check_email');
-//        }
-
         $resetToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_ '), '=');
 
         $user->setTokenResetPassword($resetToken);

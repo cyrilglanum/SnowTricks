@@ -9,6 +9,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,7 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, MailerInterface $mailer): Response
     {
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -34,6 +35,7 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
+
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
                     $user,
@@ -46,13 +48,15 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('cyrilglanum@ocprojects.fr', 'Mail Bot ST'))
+
+            $email = (new TemplatedEmail())
+                    ->from(new Address('cyrilglanum@ocprojects.fr', 'SnowTricks Mail Manager'))
                     ->to($user->getEmail())
                     ->subject('Inscription à SnowTricks')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+                    ->htmlTemplate('registration/confirmation_email.html.twig');
+
+            $mailer->send($email);
+
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_home');
