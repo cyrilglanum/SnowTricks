@@ -174,11 +174,7 @@
                 limit = data.limit_offset.max
 
                 $.each(data.result.commentaires, function (index, element) {
-                    // console.log(element)
-                    // if(element[4] != null){
-                    //
-                    // }
-                    template += `<span>${element[0]}</span><br>
+                    template += `<img src="{{ asset('uploads/tricksFile') }}/${element[3]}" style="max-height: 160px"><br><span>${element[0]}</span><br>
                     <em>Ecrit le ${element[1]} par ${element[2]}</em>
                     <br>
                     <hr>`;

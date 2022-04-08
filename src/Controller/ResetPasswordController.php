@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UsersRepository;
 use App\Entity\Users;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
@@ -37,13 +38,12 @@ class ResetPasswordController extends AbstractController
      * @Route("/reset-password/app_forgot_password_request",name="app_forgot_password_request")
      */
 
-    public function request(Request $request, MailerInterface $mailer): Response
+    public function request(Request $request, MailerInterface $mailer, UsersRepository $users): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             return $this->processSendingPasswordResetEmail(
                 $form->get('email')->getData(),
                 $mailer
@@ -53,6 +53,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
         ]);
+
     }
 
     /**
@@ -66,7 +67,7 @@ class ResetPasswordController extends AbstractController
         // This prevents exposing whether or not a user was found with the given email address or not
 
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
-            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
+            $resetToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_ '), '=');
         }
 
         return $this->render('reset_password/check_email.html.twig', [
@@ -77,7 +78,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      *
-     * @Route("/reset/{token}", name="app_reset_password")
+     * @Route("reset/{token}", name="app_reset_password")
      */
     public function reset(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, string $token = null): Response
     {
@@ -85,6 +86,13 @@ class ResetPasswordController extends AbstractController
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
+
+            $user = $this->getDoctrine()->getManager()->getRepository(Users::class)->findOneBy(['tokenResetPassword' => $token]);
+
+            if($user) {
+                $userEmail = $user->getEmail();
+                $request->request->set("userEmail", $userEmail);
+            }
 
             $form = $this->createForm(ResetPasswordType::class, $request);
 
@@ -94,6 +102,7 @@ class ResetPasswordController extends AbstractController
                 $user = $this->getDoctrine()->getRepository(Users::class)->findOneBy([
                     'email' => $form->getData()->request->get('reset_password')['email']
                 ]);
+
                 $token_form = $form->getData()->attributes->get('token');
 
                 if ($token_form === $user->getTokenResetPassword()) {
@@ -177,7 +186,7 @@ class ResetPasswordController extends AbstractController
 //            return $this->redirectToRoute('app_check_email');
 //        }
 
-        $resetToken = 'ResetPassword-' . $user->getId() . $user->getPassword() . 'tok';
+        $resetToken = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_ '), '=');
 
         $user->setTokenResetPassword($resetToken);
         $em = $this->getDoctrine()->getManager();

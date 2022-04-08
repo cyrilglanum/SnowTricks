@@ -21,9 +21,9 @@ class ResetPasswordType extends AbstractType
                     'class' => 'col-12 mb-3'
                 ],
                 'label' => 'Email',
-                'data_class' => null,
                 'mapped' => false,
-
+                'disabled' => true,
+                'data' => $options['data']->request->get('userEmail'),
             ])
             ->add('newPassword', PasswordType::class, [
                 "attr" => [

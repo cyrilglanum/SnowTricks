@@ -338,7 +338,7 @@ class TrickController extends AbstractController
 
         $tricks = $this->getDoctrine()
             ->getRepository(Tricks::class)
-            ->findBy(array(), null, 8, $min);
+            ->findBy(array(), ['date_creation' => 'DESC'], 8, $min);
 
         $output['limit_offset'] = ['min' => $min + 8, 'max' => $max + 8];
         $output['result'] = [];
@@ -360,7 +360,6 @@ class TrickController extends AbstractController
         $min = $request->request->get('min');
         $max = $request->request->get('max');
         $trickId = $request->request->get('trickId');
-        $user = $request->request->get('user');
 
         $allComments = $this->getDoctrine()
             ->getRepository(Comments::class)
@@ -368,29 +367,23 @@ class TrickController extends AbstractController
 
         $comments = $this->getDoctrine()
             ->getRepository(Comments::class)
-            ->findBy(['trick_id' => $trickId], null, 4, $min);
+            ->findBy(['trick_id' => $trickId], ['created_at' => 'DESC'], 10, $min);
 
-        $output['limit_offset'] = ['min' => $min + 4, 'max' => $max + 4];
+        $output['limit_offset'] = ['min' => $min + 10, 'max' => $max + 10];
         $output['result'] = [];
-    /*$userId = $this->getDoctrine()
-                ->getManager()
-            ->getRepository(Users::class)
 
-            ->findAll();*/
-    //dd($userId);
         foreach ($comments as $comment) {
+            $userId = $this->getDoctrine()
+                ->getManager()
+                ->getRepository(Users::class)
+                ->find($comment->getUser()->getId());
 
+            $userPictUrl = $userId->getImage();
 
-
-
-         /*  $userPictUrl = $this->getDoctrine()->getManager()->getRepository(Users::class)->find($userId);*/
-
-
-
-
-            $output['result']['commentaires'][] = array($comment->getMessage(), $comment->getCreatedAt()->format('d-m-Y à H:i:s'), $comment->getAuthor(), $comment->getUser()->getId() ?? 1, $user);
+            $output['result']['commentaires'][] = array($comment->getMessage(), $comment->getCreatedAt()->format('d-m-Y à H:i:s'), $comment->getAuthor(),
+                $userPictUrl);
         }
-dd($comment->getUser()->getImage());
+
         $output['result']['total'] = count($allComments);
         $output['result']['current'] = $max;
 
