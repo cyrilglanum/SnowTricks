@@ -147,7 +147,7 @@ class Tricks extends AbstractType
         $this->comments = new ArrayCollection();
     }
 
-      /**
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="trick",cascade={"all"})
      */
     private $medias;
@@ -168,9 +168,9 @@ class Tricks extends AbstractType
 //    }
 
 
-   /**
-     * @return Collection|Media[]
-     */
+    /**
+      * @return Collection|Media[]
+      */
     public function getMedias(): Collection
     {
         return $this->medias;
@@ -232,6 +232,4 @@ class Tricks extends AbstractType
 
         return $this;
     }
-
-
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Entity\Comments;
@@ -32,6 +31,11 @@ class TrickController extends AbstractController
         $trick = new Tricks();
         $form = $this->createForm(TrickType::class, $trick);
         $user = $this->getUser();
+
+        if ($user === null) {
+            $this->addFlash('error', 'Veuillez vous connecter pour ajouter un trick.');
+            return $this->redirectToRoute('app_login');
+        }
 
         $form->handleRequest($request);
 
@@ -219,7 +223,6 @@ class TrickController extends AbstractController
             $trick->setDateCreation(new \DateTime('now'));
             $trick->setUser($user);
 
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($trick);
             $em->flush();
@@ -306,11 +309,11 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/{id}", name="trick", methods={"GET"})
+     * @Route("/trick/{slug}", name="trick", methods={"GET"})
      */
-    public function trick($id)
+    public function trick($slug)
     {
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findBy(['name' => $slug])[0];
 
         if (!$trick) {
             return $this->render('404.html.twig');
@@ -320,7 +323,9 @@ class TrickController extends AbstractController
         $medias = $trick->getMedias()->getValues();
         $user = $this->getUser();
 
-        return $this->render('tricks/trick.html.twig', ['trick' => $trick, 'comments' => $comments, 'medias' => $medias, 'user' => $user]
+        return $this->render(
+            'tricks/trick.html.twig',
+            ['trick' => $trick, 'comments' => $comments, 'medias' => $medias, 'user' => $user]
         );
     }
 
@@ -388,7 +393,6 @@ class TrickController extends AbstractController
         $output['result']['current'] = $max;
 
         return new JsonResponse($output);
-
     }
 
     /**
@@ -489,8 +493,5 @@ class TrickController extends AbstractController
         $em->flush();
 
         return new JsonResponse(200, $img->getUrl());
-
     }
-
-
 }

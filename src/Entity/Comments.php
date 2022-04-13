@@ -131,5 +131,4 @@ class Comments
 //    {
 //        return $this->image;
 //    }
-
 }

@@ -200,7 +200,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return ''.$this->id;
     }
 
@@ -217,7 +218,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->comments;
     }
 
-      /**
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Tricks", mappedBy="user")
      */
     private $tricks;
@@ -229,5 +230,4 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->tricks;
     }
-
 }
