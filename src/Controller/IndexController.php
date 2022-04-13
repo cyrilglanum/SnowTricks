@@ -149,7 +149,7 @@ class IndexController extends AbstractController
      */
     public function newComment(Request $request)
     {
-        if (is_null($this->getUser())) {
+        if ($this->getUser() === null) {
             return $this->render('403.html.twig');
         }
 

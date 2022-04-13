@@ -44,7 +44,7 @@ class TrickController extends AbstractController
 
             $name = htmlspecialchars($form->getData()->getName());
 
-            $trick_name_exist = $tricksRepository->findBy(array('name' => $name), $orderBy = null, $limit = null, $offset = null);
+            $trick_name_exist = $tricksRepository->findBy(array('name' => $name));
 
             if (!$trick_name_exist) {
                 $trick->setName($name);

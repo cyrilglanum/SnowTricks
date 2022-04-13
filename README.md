@@ -2,7 +2,6 @@
 
 ## Sommaire documentation sur le projet
 
-
 [Documentation projet](https://openclassrooms.com/fr/paths/59/projects/42/assignment)
 
 ## Environnements
@@ -31,7 +30,6 @@
 ```
 
 #### Configurer le fichier .env
-
 
 #### Optimizing Configuration Loading
 

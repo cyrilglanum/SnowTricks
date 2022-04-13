@@ -57,8 +57,8 @@ p {
 }
 
 .alert {
-        font-size: 2vw;
-    }
+    font-size: 2vw;
+}
 
 @media screen and (max-width: 992px) {
     #background-img {
@@ -87,6 +87,10 @@ p {
         font-size: 1.9rem !important;
     }
 
+    a.nav-link {
+        font-size: 5rem;
+    }
+
     #phoneNavbar a.nav-link {
         display: block
     }
@@ -107,10 +111,6 @@ p {
 
     #mainNavbar {
         display: none
-    }
-
-    a.nav-link {
-        font-size: 5rem;
     }
 
     i {
