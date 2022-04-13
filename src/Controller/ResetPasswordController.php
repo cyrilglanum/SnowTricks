@@ -100,7 +100,7 @@ class ResetPasswordController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $user = $this->getDoctrine()->getRepository(Users::class)->findOneBy([
-                    'email' => $form->getData()->request->get('reset_password')['email']
+                    'tokenResetPassword' => $form->getData()->request->get('reset_password')['token']
                 ]);
 
                 $token_form = $form->getData()->attributes->get('token');

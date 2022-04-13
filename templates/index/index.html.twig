@@ -19,7 +19,7 @@
     </div>
 
     <script type="text/javascript">
-        let url_trick = '{{ url('trick', {'id' : '--idTrick--' }) }}';
+        let url_trick = '{{ url('trick', {'slug' : '--slugTrick--' }) }}';
         let url_edit_trick = '{{ url('editTrick',{'trick_id' : '--idTrick--'}) }}';
         let url_delete_trick = '{{ url('deleteTrick',{'id' : '--idTrick--'}) }}';
         let asset_url = '{{ asset('uploads/tricksFile') }}/--imgBg--';
@@ -52,7 +52,7 @@
                                 <div style="height: 350px">
                                     <h3>` + $(this)[1] + `</h3>
                                     <br>
-                                                        <a href="` + url_trick.replaceAll("--idTrick--", $(this)[0]) + `"><img
+                                                        <a href="` + url_trick.replaceAll("--slugTrick--", $(this)[1]) + `"><img
                                                 src="` + asset_url.replace("--imgBg--", $(this)[2]) + `"
                                                 width="100%" style="max-height: 240px">
                                     </a></div>
