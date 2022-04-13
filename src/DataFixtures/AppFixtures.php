@@ -1,6 +1,7 @@
 <?php
 
 // src/DataFixtures/AppFixtures.php
+
 namespace App\DataFixtures;
 
 use App\Entity\Comments;
@@ -18,13 +19,12 @@ class AppFixtures extends Fixture
             $product->setDescription('description');
             $product->setImgBackground('urld151502020.jpg');
             $product->setGroupe('tricks');
-            $product->setDateCreation(\DateTime::createFromFormat('Y-m-d H:i:s','2021-12-15 10:28:36'));
+            $product->setDateCreation(\DateTime::createFromFormat('Y-m-d H:i:s', '2021-12-15 10:28:36'));
 
             $manager->persist($product);
         }
 
         for ($j = 0; $j < 20; $j++) {
-
             $product = new Comments();
             $product->setAuthor('trick ' . $j);
             $product->setMessage($this->RandomString());
@@ -37,7 +37,7 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    function RandomString()
+    public function RandomString()
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $rand = '';

@@ -49,7 +49,6 @@ class IndexController extends AbstractController
      */
     public function editProfil(Request $request, $id, SluggerInterface $slugger)
     {
-
         $user = $this->getDoctrine()->getManager()->getRepository(Users::class)->find($id);
 
         if (!$user) {
@@ -100,7 +99,6 @@ class IndexController extends AbstractController
         return $this->render('profil/editProfil.html.twig', array(
             'user' => $user,
             'form' => $form->createView(),));
-
     }
 
 
@@ -114,7 +112,8 @@ class IndexController extends AbstractController
         $medias = $trick->getMedias()->getValues();
         $user = $this->getUser();
 
-        return $this->render('index/test.html.twig',
+        return $this->render(
+            'index/test.html.twig',
             [
                 'trick' => $trick,
                 'comments' => $comments,
@@ -136,7 +135,8 @@ class IndexController extends AbstractController
 
         $user = $this->getUser();
 
-        return $this->render('index/forum.html.twig',
+        return $this->render(
+            'index/forum.html.twig',
             [
                 'comments' => $comments,
                 'user' => $user
@@ -149,7 +149,7 @@ class IndexController extends AbstractController
      */
     public function newComment(Request $request)
     {
-        if(is_null($this->getUser())){
+        if (is_null($this->getUser())) {
             return $this->render('403.html.twig');
         }
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Entity\Comments;
@@ -33,9 +32,9 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $user = $this->getUser();
 
-        if($user === null){
+        if ($user === null) {
             $this->addFlash('error', 'Veuillez vous connecter pour ajouter un trick.');
-                return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_login');
         }
 
         $form->handleRequest($request);
@@ -324,7 +323,9 @@ class TrickController extends AbstractController
         $medias = $trick->getMedias()->getValues();
         $user = $this->getUser();
 
-        return $this->render('tricks/trick.html.twig', ['trick' => $trick, 'comments' => $comments, 'medias' => $medias, 'user' => $user]
+        return $this->render(
+            'tricks/trick.html.twig',
+            ['trick' => $trick, 'comments' => $comments, 'medias' => $medias, 'user' => $user]
         );
     }
 
@@ -392,7 +393,6 @@ class TrickController extends AbstractController
         $output['result']['current'] = $max;
 
         return new JsonResponse($output);
-
     }
 
     /**
@@ -493,8 +493,5 @@ class TrickController extends AbstractController
         $em->flush();
 
         return new JsonResponse(200, $img->getUrl());
-
     }
-
-
 }

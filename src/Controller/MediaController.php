@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Controller;
-
 
 use App\Entity\Media;
 use App\Entity\Tricks;
@@ -52,7 +50,6 @@ class MediaController extends AbstractController
                             $newFilename
                         );
                     }
-
                 } catch (FileException $e) {
                     return $e;
                 }
@@ -104,5 +101,4 @@ class MediaController extends AbstractController
 
         return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
     }
-
 }

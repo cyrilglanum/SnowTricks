@@ -20,7 +20,6 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
@@ -53,7 +52,6 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
         ]);
-
     }
 
     /**
@@ -89,7 +87,7 @@ class ResetPasswordController extends AbstractController
 
             $user = $this->getDoctrine()->getManager()->getRepository(Users::class)->findOneBy(['tokenResetPassword' => $token]);
 
-            if($user) {
+            if ($user) {
                 $userEmail = $user->getEmail();
                 $request->request->set("userEmail", $userEmail);
             }
@@ -120,7 +118,6 @@ class ResetPasswordController extends AbstractController
                     $this->addFlash('success', 'Le mot de passe a bien été modifié.');
 
                     return $this->redirectToRoute('app_home');
-
                 } else {
                     $this->addFlash('error', 'Une erreur a eu lieu lors de la modification, veuillez réessayer.');
                     $this->redirectToRoute('app_home');
