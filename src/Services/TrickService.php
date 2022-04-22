@@ -259,6 +259,9 @@ class TrickService extends AbstractController
 
     public function addComment(Request $request, FormInterface $form, $trick, $user_id, Comments $comment)
     {
+        if ($form->get('message')->getData() === null) {
+            return false;
+        }
         $comment->setMessage(htmlspecialchars($form->get('message')->getData()));
         $comment->setTrick($trick);
         $comment->setUser($this->getUser());
@@ -273,10 +276,21 @@ class TrickService extends AbstractController
     {
         $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->find($id);
 
-        if($trick === null){
+        if ($trick === null) {
             return false;
         }
 
-            return $trick;
+        return $trick;
+    }
+
+    public function getTrickBySlug($slug)
+    {
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findBy(array('slug' => $slug));
+
+        if ($trick === null) {
+            return false;
+        }
+
+        return $trick[0];
     }
 }

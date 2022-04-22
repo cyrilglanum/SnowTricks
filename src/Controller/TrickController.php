@@ -8,20 +8,13 @@ use App\Entity\Tricks;
 use App\Entity\Users;
 use App\Form\CommentType;
 use App\Form\TrickType;
-use App\Repository\MediaRepository;
 use App\Repository\TricksRepository;
 use App\Services\MediaService;
 use App\Services\TrickService;
-use http\Client\Response;
-use http\Env;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
@@ -118,7 +111,7 @@ class TrickController extends AbstractController
      */
     public function trick($slug)
     {
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findBy(['name' => $slug])[0];
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findBy(['slug' => $slug])[0];
 
         if (!$trick) {
             return $this->render('404.html.twig');
@@ -234,14 +227,14 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/comment/{id}", name="commentTrick", methods={"GET", "POST"})
+     * @Route("/trick/comment/{slug}", name="commentTrick", methods={"GET", "POST"})
      */
-    public function commentTrick(Request $request, $id, TrickService $trickService)
+    public function commentTrick(Request $request, $slug, TrickService $trickService)
     {
         $user_id = $this->getUser()->getId();
         $comment = new Comments();
 
-        $trick = $trickService->getTrick($id);
+        $trick = $trickService->getTrickBySlug($slug);
 
         if ($trick === false) {
                 $this->addFlash('error', "La page que vous recherchez n'existe pas.");

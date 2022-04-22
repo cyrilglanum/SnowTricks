@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Comments;
 use App\Entity\Tricks;
 use App\Entity\Users;
-use App\Form\CommentType;
 use App\Form\Comment0Type;
 use App\Form\UserUpdateType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

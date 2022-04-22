@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\UsersRepository;
 use App\Entity\Users;
-use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Form\ResetPasswordType;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,7 +16,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
-use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 class ResetPasswordController extends AbstractController
