@@ -2,25 +2,11 @@
 
 namespace App\Services;
 
-use App\Entity\Comments;
-use App\Entity\Media;
 use App\Entity\Tricks;
-use App\Entity\Users;
-use App\Form\CommentType;
-use App\Form\Comment0Type;
-use App\Form\UserUpdateType;
 use App\Repository\MediaRepository;
-use App\Repository\TricksRepository;
-use App\Repository\UsersRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class MediaService extends AbstractController
 {
