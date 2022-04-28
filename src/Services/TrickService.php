@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use function PHPUnit\Framework\throwException;
 
 class TrickService extends AbstractController
 {
@@ -260,7 +261,7 @@ class TrickService extends AbstractController
     public function addComment(Request $request, FormInterface $form, $trick, $user_id, Comments $comment)
     {
         if ($form->get('message')->getData() === null) {
-            return false;
+          throw new \Exception("Le commentaire n'est pas conforme.");
         }
         $comment->setMessage(htmlspecialchars($form->get('message')->getData()));
         $comment->setTrick($trick);
@@ -285,12 +286,12 @@ class TrickService extends AbstractController
 
     public function getTrickBySlug($slug)
     {
-        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findBy(array('slug' => $slug));
+        $trick = $this->getDoctrine()->getManager()->getRepository(Tricks::class)->findOneBy(array('slug' => $slug));
 
         if ($trick === null) {
             return false;
         }
 
-        return $trick[0];
+        return $trick;
     }
 }

@@ -11,6 +11,7 @@ use App\Form\TrickType;
 use App\Repository\TricksRepository;
 use App\Services\MediaService;
 use App\Services\TrickService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -247,7 +248,12 @@ class TrickController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $trickService->addComment($request, $form, $trick, $user_id, $comment);
+            try {
+            	$trickService->addComment($request, $form, $trick, $user_id, $comment);
+            } catch (Exception $e) {
+                $this->addFlash('error', "Le commentaire n'est pas conforme. Il n'a pas été ajouté.");
+                return $this->redirectToRoute('app_home');
+            }
 
             return $this->redirectToRoute('trick', ['slug' => $trick->getSlug()]);
         }
