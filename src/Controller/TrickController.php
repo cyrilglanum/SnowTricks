@@ -46,7 +46,12 @@ class TrickController extends AbstractController
                 return $this->redirectToRoute('app_home');
             }
 
-            $trickService->addTrick($form, $request, $name, $trick, $user, $tricksRepository, $slugger);
+            try {
+                $trickService->addTrick($form, $request, $name, $trick, $user, $tricksRepository, $slugger);
+            } catch (Exception $e) {
+                $this->addFlash('error', "Le trick n'est pas conforme. Il n'a pas été ajouté.");
+                return $this->redirectToRoute('app_home');
+            }
 
             $this->addFlash('success', 'Le trick a bien été ajouté.');
             return $this->redirectToRoute('app_home');
@@ -92,7 +97,12 @@ class TrickController extends AbstractController
                 return $this->redirectToRoute('app_home');
             }
 
-            $trickService->updateTrick($form, $request, $name, $trick, $user, $tricksRepository, $slugger, $em);
+            try {
+                $trickService->updateTrick($form, $request, $name, $trick, $user, $tricksRepository, $slugger, $em);
+            } catch (Exception $e) {
+                $this->addFlash('error', "Le trick n'est pas conforme. Il n'a pas été ajouté.");
+                return $this->redirectToRoute('app_home');
+            }
 
             $this->addFlash('success', 'Le trick a bien été modifié.');
             return $this->redirectToRoute('app_home');
@@ -238,9 +248,9 @@ class TrickController extends AbstractController
         $trick = $trickService->getTrickBySlug($slug);
 
         if ($trick === false) {
-                $this->addFlash('error', "La page que vous recherchez n'existe pas.");
-                return $this->redirectToRoute('app_home');
-            }
+            $this->addFlash('error', "La page que vous recherchez n'existe pas.");
+            return $this->redirectToRoute('app_home');
+        }
 
         $form = $this->createForm(CommentType::class, ['trick' => $trick, 'user_id' => $user_id]);
 
@@ -249,7 +259,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             try {
-            	$trickService->addComment($request, $form, $trick, $user_id, $comment);
+                $trickService->addComment($request, $form, $trick, $user_id, $comment);
             } catch (Exception $e) {
                 $this->addFlash('error', "Le commentaire n'est pas conforme. Il n'a pas été ajouté.");
                 return $this->redirectToRoute('app_home');

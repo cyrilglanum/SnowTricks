@@ -55,10 +55,16 @@ class IndexController extends AbstractController
         }
 
         $form = $this->createForm(UserUpdateType::class, $user);
+
         $form->handleRequest($request);
 
         //soumission du form
         if ($form->isSubmitted() && $form->isValid()) {
+            if($form->getData()->getUsername() === null || $form->getData()->getUsername() === ''){
+                $this->addFlash('error', "L'identifiant utilisateur n'est pas correct.");
+                return $this->redirectToRoute('app_home');
+            }
+
             $user->setUsername($form->getData()->getUsername());
             $brochureFile = $form->get('image')->getData();
             if ($brochureFile) {

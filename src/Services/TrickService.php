@@ -26,6 +26,10 @@ class TrickService extends AbstractController
 
     function addTrick($form, $request, $name, $trick, $user, TricksRepository $tricksRepository, SluggerInterface $slugger)
     {
+
+        if($name === ''|| $name === null){
+            throw new \Exception("Le nom du trick n'est pas conforme.");
+        }
         $trick->setName($name);
         $brochureFile = $form->get('img_background')->getData();
         if ($brochureFile) {
@@ -152,6 +156,10 @@ class TrickService extends AbstractController
                 $em->remove($mediaTodelete);
                 $em->flush();
             }
+        }
+
+        if($name === ''|| $name === null){
+            throw new \Exception("Le nom du trick n'est pas conforme.");
         }
 
         $trick->setName($name);
