@@ -28,10 +28,11 @@
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >
-            <button class="btn btn-primary" type="submit">
+            <button class="btn btn-dark" type="submit">
                 Se connecter
             </button>
-            <p><a href="{{ url('app_forgot_password_request') }}">Mot de passe oublié</a></p>
+            <p><a href="{{ url('app_register') }}"  style="color: black">S'inscrire</a></p>
+            <p><a href="{{ url('app_forgot_password_request') }}" style="color: black">Mot de passe oublié ?</a></p>
         </form>
     </div>
 {% endblock %}

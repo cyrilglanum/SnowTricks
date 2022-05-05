@@ -155,7 +155,9 @@ class IndexController extends AbstractController
     public function newComment(Request $request)
     {
         if ($this->getUser() === null) {
-            return $this->render('403.html.twig');
+
+            $this->addFlash('error', "Veuillez vous identifier pour laisser un commentaire .");
+                return $this->redirectToRoute('app_login');
         }
 
         $user_id = $this->getUser()->getId();

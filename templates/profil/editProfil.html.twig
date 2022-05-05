@@ -26,18 +26,18 @@
     </div>
 
     <script>
-        let identifiant = document.getElementById('user_update_username');
-
-        identifiant.addEventListener("keyup", event => {
-            if (identifiant.value == " " || identifiant.value == null) {
-                identifiant.value = '';
-                document.getElementById('username').innerHTML = 'Votre identifiant ne peut pas commencer par un espace.';
-                document.getElementById('submit').classList.add('d-none');
-            } else {
-                document.getElementById('submit').classList.remove('d-none');
-                document.getElementById('username').innerHTML = '';
-            }
-        });
+        // let identifiant = document.getElementById('user_update_username');
+        //
+        // identifiant.addEventListener("keyup", event => {
+        //     if (identifiant.value == " " || identifiant.value == null) {
+        //         identifiant.value = '';
+        //         document.getElementById('username').innerHTML = 'Votre identifiant ne peut pas commencer par un espace.';
+        //         document.getElementById('submit').classList.add('d-none');
+        //     } else {
+        //         document.getElementById('submit').classList.remove('d-none');
+        //         document.getElementById('username').innerHTML = '';
+        //     }
+        // });
 
     </script>
 {% endblock %}

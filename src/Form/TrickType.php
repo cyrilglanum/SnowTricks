@@ -18,9 +18,10 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 "attr" => [
-                    'class' => 'col-12 mb-3'
+                    'class' => 'col-12 mb-3',
+                    'required' => true
                 ],
-                'label' => 'Nom de la figure',
+                'label' => 'Nom de la figure *',
 
             ])
             ->add('img_background', FileType::class, [
@@ -29,7 +30,7 @@ class TrickType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Image de présentation',
+                'label' => 'Image de présentation *',
             ])
 //            ->add('images', FileType::class, [
 //                "attr" => [
@@ -57,18 +58,22 @@ class TrickType extends AbstractType
                 ],
                 'mapped' => false,
                 'required' => false,
-                'label' => 'videos intégrées',
-                'help' => 'Url séparées par une ","',
+                'label' => 'Videos intégrées',
+                'help' => 'Url partage youtube séparées par une ","',
             ])
             ->add('description', TextType::class, [
                 "attr" => [
-                    'class' => 'col-12 mb-3'
+                    'class' => 'col-12 mb-3',
+                    'required' => true
                 ],
+                'label' => 'Description *',
             ])
             ->add('groupe', TextType::class, [
                 "attr" => [
-                    'class' => 'col-12'
+                    'class' => 'col-12',
+                    'required' => true
                 ],
+                'label' => 'Groupe *',
             ]);
     }
 

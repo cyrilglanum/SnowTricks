@@ -24,7 +24,7 @@ class TrickService extends AbstractController
         $this->trickRepository = $trickRepository;
     }
 
-    function addTrick($form, $request, $name, $trick, $user, TricksRepository $tricksRepository, SluggerInterface $slugger)
+    function addTrick($form, $request, $name, $trick, $user, SluggerInterface $slugger)
     {
 
         if($name === ''|| $name === null){

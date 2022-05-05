@@ -47,7 +47,7 @@ class TrickController extends AbstractController
             }
 
             try {
-                $trickService->addTrick($form, $request, $name, $trick, $user, $tricksRepository, $slugger);
+                $trickService->addTrick($form, $request, $name, $trick, $user, $slugger);
             } catch (Exception $e) {
                 $this->addFlash('error', "Le trick n'est pas conforme. Il n'a pas été ajouté.");
                 return $this->redirectToRoute('app_home');
@@ -229,7 +229,7 @@ class TrickController extends AbstractController
 
         $tricks = $entityManager->getRepository(Tricks::class)->findAll();
 
-        $this->addFlash('success', 'La figure a bien été supprimée.');
+        $this->addFlash('success', 'Le trick a bien été supprimé.');
 
         return $this->redirectToRoute('app_home', [
             'tricks' => $tricks,

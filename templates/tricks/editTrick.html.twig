@@ -10,7 +10,7 @@
 
 
     <div class="container">
-        <h1>Modifier un trick</h1>
+        <h1 style="margin-top: 50px">Modifier un trick</h1>
         {# <p style="color: green"> {{ message }}</p> #}
         {{ form_start(form) }}
         {{ form_row(form.name) }}
@@ -25,94 +25,98 @@
             <span id="span"></span>
 
         </div>
-                <h2>Cochez les médias que vous voulez supprimer</h2>
-                    {% for media in trick.medias %}
-                <br>
-                        <input type="checkbox" name="media_to_delete[]" value="{{ media.id }}">
-                        {% if(media.type == 'IMG') %}
-                        <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="width: 300px;margin-bottom: 15px">
-                        {% else %}
+        {% if trick.medias is not null %}
+            <h2>Cochez les médias que vous voulez supprimer</h2>
+        {% endif %}
 
-                                    <a class="d-block mb-4 h-100" style="margin-left: 50px">
-                                    <embed type="video/webm"
-                                           src="{{ media.url }}"
-                                           width="380"
-                                           height="280">
-                                    <a href="{{ media.url }}"></a>
-                        {% endif %}
-                    {% endfor %}
-{#                {{ form_row(form.images) }}#}
-        {{ form_row(form.videos) }}
-        <button type="submit" class="mt-3 btn btn-primary">Modifier mon trick</button>
-        {{ form_end(form) }}
+        {% for media in trick.medias %}
+        <br>
+        <input type="checkbox" name="media_to_delete[]" value="{{ media.id }}">
+        {% if(media.type == 'IMG') %}
+        <img src="{{ asset('uploads/tricksFile') }}/{{ media.url }}" style="width: 300px;margin-bottom: 15px">
+        {% else %}
+
+        <a class="d-block mb-4 h-100" style="margin-left: 50px">
+            <embed type="video/webm"
+                   src="{{ media.url }}"
+                   width="380"
+                   height="280">
+            <a href="{{ media.url }}"></a>
+            {% endif %}
+            {% endfor %}
+            {#                {{ form_row(form.images) }} #}
+            {{ form_row(form.videos) }}
+            <button type="submit" class="mt-3 btn btn-dark" style="margin-bottom: 30px">Modifier mon trick</button>
+            {{ form_end(form) }}
     </div>
 {% endblock %}
 
 {% block javascripts %}
-        <script>
-            let collection, boutonAjout, span;
+    <script>
+        let collection, boutonAjout, span;
 
-            window.onload = ()=> {
-                collection = document.querySelector("#mediaCollection");
-                span = document.querySelector("#span");
-                boutonAjout = document.createElement("button");
-                boutonAjout.className = "ajout-media btn secondary";
-                boutonAjout.innerText = "Ajouter un media";
+        window.onload = () => {
+            collection = document.querySelector("#mediaCollection");
+            span = document.querySelector("#span");
+            boutonAjout = document.createElement("button");
+            boutonAjout.className = "ajout-media btn secondary";
+            boutonAjout.innerText = "Ajouter un media";
 
-                let nouveauBouton = span.append(boutonAjout);
-                collection.dataset.index = collection.querySelectorAll('input').length;
+            let nouveauBouton = span.append(boutonAjout);
+            collection.dataset.index = collection.querySelectorAll('input').length;
 
-                boutonAjout.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    addButton(collection, nouveauBouton);
-                })
+            boutonAjout.addEventListener("click", function (e) {
+                e.preventDefault();
+                addButton(collection, nouveauBouton);
+            })
 
-            }
-            function addButton(collection, nouveauBouton){
-                let prototype = collection.dataset.prototype;
-                let index = collection.dataset.index;
-                prototype = prototype.replace(/__name__/g, index);
+        }
 
-                let content = document.createElement("html");
-                content.innerHTML = prototype;
+        function addButton(collection, nouveauBouton) {
+            let prototype = collection.dataset.prototype;
+            let index = collection.dataset.index;
+            prototype = prototype.replace(/__name__/g, index);
 
-                let newForm = content.querySelector("div");
+            let content = document.createElement("html");
+            content.innerHTML = prototype;
 
-                let boutonSupp = document.createElement("button");
+            let newForm = content.querySelector("div");
 
-                boutonSupp.type = "button";
-                boutonSupp.className = "btn red";
-                boutonSupp.id = "delete-media-"+ index;
-                boutonSupp.innerText = "supprimer le media";
+            let boutonSupp = document.createElement("button");
 
-                newForm.append(boutonSupp);
+            boutonSupp.type = "button";
+            boutonSupp.className = "btn red";
+            boutonSupp.id = "delete-media-" + index;
+            boutonSupp.innerText = "supprimer le media";
 
-                collection.dataset.index ++;
+            newForm.append(boutonSupp);
 
-                let boutonAjout = collection.querySelector(".ajout-media");
+            collection.dataset.index++;
 
-                span.insertBefore(newForm, boutonAjout);
+            let boutonAjout = collection.querySelector(".ajout-media");
 
-                boutonSupp.addEventListener("click",function () {
-                    (this).previousElementSibling.parentElement.remove();
-                })
-            }
+            span.insertBefore(newForm, boutonAjout);
+
+            boutonSupp.addEventListener("click", function () {
+                (this).previousElementSibling.parentElement.remove();
+            })
+        }
 
 
-            // function readURL(input) {
-            //     if (input.files && input.files[0]) {
-            //         var reader = new FileReader();
-            //         reader.onload = function (e) {
-            //             $('#avatar').attr('src', e.target.result);
-            //             $('#avatar').removeClass('d-none')
-            //         };
-            //         reader.readAsDataURL(input.files[0]);
-            //     }
-            // }
-            //
-            // $("#trick_file").change(function () {
-            //     readURL(this);
-            // });
-        </script>
-    {% endblock %}
+        // function readURL(input) {
+        //     if (input.files && input.files[0]) {
+        //         var reader = new FileReader();
+        //         reader.onload = function (e) {
+        //             $('#avatar').attr('src', e.target.result);
+        //             $('#avatar').removeClass('d-none')
+        //         };
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+        // }
+        //
+        // $("#trick_file").change(function () {
+        //     readURL(this);
+        // });
+    </script>
+{% endblock %}
 
