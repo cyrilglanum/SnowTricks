@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
@@ -109,40 +108,23 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
      * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
-        return $this->username;
-    }
-
-//    /**
-//     * @Assert\NotBlank
-//     */
-//    public function setUsername(string $username): self
-//    {
-//        $this->username = $username;
-//
-//        return $this;
-//    }
-
-    public function getPseudo(): string
-    {
-        return $this->username;
+        return (string) $this->username;
     }
 
     /**
-     * @Assert\NotBlank
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
      */
-    public function setPseudo(string $username): self
+    public function getPseudo(): string
     {
-        $this->username = $username;
-
-        return $this;
+        return (string) $this->username;
     }
 
     /**
@@ -211,10 +193,15 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-    public function __toString()
+    public function setUsername(string $username): self
     {
-        return '' . $this->id;
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function __toString() {
+        return ''.$this->id;
     }
 
     /**
@@ -230,7 +217,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->comments;
     }
 
-    /**
+      /**
      * @ORM\OneToMany(targetEntity="App\Entity\Tricks", mappedBy="user")
      */
     private $tricks;
@@ -242,4 +229,5 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->tricks;
     }
+
 }
