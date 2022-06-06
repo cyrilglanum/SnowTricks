@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Structure de la table `comments`
 --
 
-CREATE TABLE `comments` (
+CREATE TABLE comments (
   `id` int(11) NOT NULL,
   `author` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `message` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -127,7 +127,7 @@ INSERT INTO `comments` (`id`, `author`, `message`, `created_at`, `trick_id`, `us
 -- Structure de la table `doctrine_migration_versions`
 --
 
-CREATE TABLE `doctrine_migration_versions` (
+CREATE TABLE doctrine_migration_versions (
   `version` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   `executed_at` datetime DEFAULT NULL,
   `execution_time` int(11) DEFAULT NULL
@@ -137,7 +137,7 @@ CREATE TABLE `doctrine_migration_versions` (
 -- Déchargement des données de la table `doctrine_migration_versions`
 --
 
-INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
+INSERT INTO doctrine_migration_versions (`version`, `executed_at`, `execution_time`) VALUES
 ('DoctrineMigrations\\Version20211006123128', '2021-10-06 12:33:15', 33),
 ('DoctrineMigrations\\Version20211006124817', '2021-10-06 12:49:08', 51),
 ('DoctrineMigrations\\Version20211025083704', '2021-10-25 08:46:08', 80),
@@ -149,7 +149,7 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 -- Structure de la table `logs`
 --
 
-CREATE TABLE `logs` (
+CREATE TABLE logs (
   `id` int(11) NOT NULL,
   `log` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(11) DEFAULT NULL
@@ -161,7 +161,7 @@ CREATE TABLE `logs` (
 -- Structure de la table `media`
 --
 
-CREATE TABLE `media` (
+CREATE TABLE media (
   `id` int(11) NOT NULL,
   `url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -175,7 +175,7 @@ CREATE TABLE `media` (
 -- Déchargement des données de la table `media`
 --
 
-INSERT INTO `media` (`id`, `url`, `type`, `trick_id`, `created_at`, `description`, `url_video`) VALUES
+INSERT INTO media (`id`, `url`, `type`, `trick_id`, `created_at`, `description`, `url_video`) VALUES
 (5, 'telechargement-snow-61bc62070ef36.jpg', 'IMG', 25, '2021-12-17 10:10:15', 'test image', NULL),
 (6, 'wpid-craziest-tricks1-61bc67478f8d9.jpg', 'IMG', 25, '2021-12-17 10:32:39', 'rrree', NULL),
 (7, 'istockphoto-153551554-612x612-61bc6bb63412a.jpg', 'IMG', 24, '2021-12-17 10:51:34', 'Image snow', NULL),
@@ -203,7 +203,7 @@ INSERT INTO `media` (`id`, `url`, `type`, `trick_id`, `created_at`, `description
 -- Structure de la table `reset_password_request`
 --
 
-CREATE TABLE `reset_password_request` (
+CREATE TABLE reset_password_request (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `selector` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -216,7 +216,7 @@ CREATE TABLE `reset_password_request` (
 -- Déchargement des données de la table `reset_password_request`
 --
 
-INSERT INTO `reset_password_request` (`id`, `user_id`, `selector`, `hashed_token`, `requested_at`, `expires_at`) VALUES
+INSERT INTO reset_password_request (`id`, `user_id`, `selector`, `hashed_token`, `requested_at`, `expires_at`) VALUES
 (3, 14, 'rxIbAgX9406OMM3ABmED', 'NwKbJVZwSkTBMcZ8brU4yV5u2YmiuqFMpS4uKBCfdiY=', '2022-01-12 08:20:57', '2022-01-12 09:20:57'),
 (4, 1, 'j0afYpCGVNNrwggGWe6W', 'seoFAwVDQNYixd0ZvEOx/KGoCVCq4j4fia766I4HB/s=', '2022-01-12 09:19:12', '2022-01-12 10:19:12'),
 (5, 14, '8vXmgBdmqoa1ysEzOftU', 'izHS17eDCQ24QN9UXz5Y/hIPBxP3nH1CSnXM6xnYyvo=', '2022-01-12 09:35:25', '2022-01-12 10:35:25'),
@@ -228,7 +228,7 @@ INSERT INTO `reset_password_request` (`id`, `user_id`, `selector`, `hashed_token
 -- Structure de la table `tricks`
 --
 
-CREATE TABLE `tricks` (
+CREATE TABLE tricks (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `img_background` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -243,7 +243,7 @@ CREATE TABLE `tricks` (
 -- Déchargement des données de la table `tricks`
 --
 
-INSERT INTO `tricks` (`id`, `name`, `img_background`, `description`, `groupe`, `user_id`, `date_modification`, `date_creation`) VALUES
+INSERT INTO tricks (`id`, `name`, `img_background`, `description`, `groupe`, `user_id`, `date_modification`, `date_creation`) VALUES
 (24, 'Gravity snow', 'telechargement-1-61bc6ba686609.jpg', 'Ce trick consiste à défier les lois de la gravité en faisant des photos qu\'on ne peut normalement pas obtenir d\'un geste ordinaire en snowboard', 'Gravity', NULL, '2021-12-23 09:50:20', '2021-12-01 10:49:41'),
 (25, 'Salto', 'telechargement-snow-61bc6b9f2e9d9.jpg', 'Saut à snow', 'Saut', NULL, '2021-12-17 10:53:44', '2021-11-15 13:59:46'),
 (26, 'Selfie-Jump', 'wpid-craziest-tricks1-61bc6bccd9727.jpg', 'description', 'Jump trick', NULL, '2021-12-23 09:49:08', '2021-12-01 10:49:23'),
@@ -261,7 +261,7 @@ INSERT INTO `tricks` (`id`, `name`, `img_background`, `description`, `groupe`, `
 -- Structure de la table `users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE users (
   `id` int(11) NOT NULL,
   `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
   `username` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -276,7 +276,7 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `username`, `image`, `roles`, `password`, `token_reset_password`, `is_verified`) VALUES
+INSERT INTO users (`id`, `email`, `username`, `image`, `roles`, `password`, `token_reset_password`, `is_verified`) VALUES
 (1, 'cyrilg86@glanum.com', NULL, NULL, '[]', '$2y$13$yjkcLIeNPrK937GAWJ6BeucjR43ITD5dUxOPT5LSfKQ9HBEWr.YVi', NULL, 0),
 (2, 'cyrilg86t@glanum.com', NULL, NULL, '[]', '$2y$13$p2aipvQvltC9JV6h68tPR.YOXJqd91KceohyK.31xSohZVUeDNrSO', NULL, 0),
 (3, 'cyrilg86rr@glanum.com', NULL, NULL, '[]', '$2y$13$SJQ1lJQEDMiQOEdLJEoYUewiKy9UvbWfNwR5DPdIteU/Iuczb6uOa', NULL, 0),
@@ -360,37 +360,37 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT pour la table `comments`
 --
-ALTER TABLE `comments`
+ALTER TABLE comments
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT pour la table `logs`
 --
-ALTER TABLE `logs`
+ALTER TABLE logs
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pour la table `media`
 --
-ALTER TABLE `media`
+ALTER TABLE media
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT pour la table `reset_password_request`
 --
-ALTER TABLE `reset_password_request`
+ALTER TABLE reset_password_request
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pour la table `tricks`
 --
-ALTER TABLE `tricks`
+ALTER TABLE tricks
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10000002;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
-ALTER TABLE `users`
+ALTER TABLE users
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
@@ -400,7 +400,7 @@ ALTER TABLE `users`
 --
 -- Contraintes pour la table `reset_password_request`
 --
-ALTER TABLE `reset_password_request`
+ALTER TABLE reset_password_request
   ADD CONSTRAINT `FK_7CE748AA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
