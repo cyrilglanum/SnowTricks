@@ -58,6 +58,7 @@ class RegistrationController extends AbstractController
             $mailer->send($email);
 
             // do anything else you need here, like send an email
+            $this->addFlash("success", "L'email de confirmation vous a été envoyé sur votre boite mail.");
 
             return $this->redirectToRoute('app_home');
         }
